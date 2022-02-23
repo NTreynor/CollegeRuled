@@ -19,7 +19,7 @@ class Character:
         self.murderer = False
         self.stole = False
         self.fugitive = False
-        self.relationships = {} # key: other character, val: [-10, 10]
+        self.relationships = {} # key: other character, val: [-100, 100]
         self.location = None
         # self.in_spacesuit = False
 
@@ -30,8 +30,8 @@ class Character:
         @relationship_change: int amount to change relationship by, positive or negative"""
         current_relationship =  self.relationships[other_character]
         new_relationship = current_relationship + relationship_change
-        if abs(new_relationship) > 10:
-            new_relationship = 10 * new_relationship/abs(new_relationship)
+        if abs(new_relationship) > 100:
+            new_relationship = 100 * new_relationship/abs(new_relationship)
 
         self.relationships[other_character] = int(new_relationship)
     
@@ -84,6 +84,7 @@ class WorldState:
         self.index = index
         self.characters = characters
         self.environments = environments
+        self.drama_score = 0
 
     def __str__(self):
         return ""
