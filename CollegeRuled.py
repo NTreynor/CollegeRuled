@@ -89,17 +89,19 @@ class WorldState:
     def __str__(self):
         return ""
 
-class Plotfrag:
+class PlotFragment:
     def __init__(self):
         return
 
     def checkPreconditions(self, worldstate):
+        """ return a boolean if the event can happen, 
+        the characters involved, environments, and the updated drama score"""
         return
 
     def doEvent(self, worldstate, characters):
         return
 
-class VentThroughAirlock(Plotfrag):
+class VentThroughAirlock(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         for character in worldstate.characters:
