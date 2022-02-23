@@ -1,14 +1,3 @@
-import copy
-
-from git.exc import GitCommandError
-from pydriller import Repository
-from pydriller.metrics.process.code_churn import CodeChurn
-from pydriller.metrics.process.commits_count import CommitsCount
-from datetime import datetime, timedelta, timezone
-import pandas as pd
-import pytz
-
-
 class Character:
     def __init__(self, name, health, happiness):
         self.name = name

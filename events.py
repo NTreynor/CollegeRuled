@@ -1,4 +1,5 @@
 from CollegeRuled import *
+import copy
 
 class VentThroughAirlock(PlotFragment):
     def checkPreconditions(self, worldstate):
