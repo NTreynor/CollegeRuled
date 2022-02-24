@@ -1,7 +1,19 @@
 from CollegeRuled import *
 import copy
 
-class VentThroughAirlock(Plotfrag):
+class PlotFragment:
+    def __init__(self):
+        return
+
+    def checkPreconditions(self, worldstate):
+        """ return a boolean if the event can happen,
+        the characters involved, environments, and the updated drama score"""
+        return
+
+    def doEvent(self, worldstate, characters):
+        return
+
+class VentThroughAirlock(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         for character in worldstate.characters:
@@ -22,18 +34,18 @@ class VentThroughAirlock(Plotfrag):
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
-    class FallInLove(Plotfrag):
-        def checkPreconditions(self, worldstate):
-            valid_characters = []
-            for character in worldstate.characters:
-                    for character2 in character.relationships:
-                        if (character.relationships[character2] > 0) & character.sameLoc(character2):
-                            valid_characters.append([character, character2])
+class FallInLove(PlotFragment):
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        for character in worldstate.characters:
+                for character2 in character.relationships:
+                    if (character.relationships[character2] > 0) & character.sameLoc(character2):
+                        valid_characters.append([character, character2])
 
-            if valid_characters:
-                return True, valid_characters, []
-            else:
-                return False, None, []
+        if valid_characters:
+            return True, valid_characters, []
+        else:
+            return False, None, []
 
     def doEvent(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
