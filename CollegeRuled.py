@@ -91,4 +91,30 @@ class PlotFragment:
     def doEvent(self, worldstate, characters):
         return
 
+if __name__ == "__main__":
+    serenity = Environment("Serenity", 25, False, True)
+    space = Environment("Space", -100, True, False)
+    serenity.setDistance(space, 0)
+    space.setDistance(serenity, 0)
+
+    jess = Character("Jess", 0, serenity, False)
+    mal = Character("Mal", 5, serenity, False)
+    jess.updateRelationship(mal, -15)
+    mal.updateRelationship(jess, 25)
+
+    environments = [serenity, space]
+    characters = [jess, mal]
+
+    initialState = WorldState(0, characters, environments)
+
+
+    loveEvent = VentThroughAirlock()
+    preconditions_met, characters, environments = loveEvent.checkPreconditions(initialState)
+    if preconditions_met:
+        next_worldstate = loveEvent.doEvent(initialState, characters[0], environments)
+
+    #airlockEvent = VentThroughAirlock()
+    #preconditions_met, characters = airlockEvent.checkPreconditions(initialState)
+    #if preconditions_met:
+    #    next_worldstate = airlockEvent.doEvent(initialState, characters[0], space)
 
