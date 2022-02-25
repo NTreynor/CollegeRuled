@@ -1,7 +1,7 @@
 from CollegeRuled import *
 import copy
 
-from events import VentThroughAirlock
+from events import VentThroughAirlock, FallInLove
 
 
 class Character:
@@ -95,11 +95,13 @@ class WorldState:
         return ""
 
 if __name__ == "__main__":
+    # Environment Initialization
     serenity = Environment("Serenity", 25, False, True)
     space = Environment("Space", -100, True, False)
     serenity.setDistance(space, 0)
     space.setDistance(serenity, 0)
 
+    # Character & Relationship Initialization
     jess = Character("Jess", 10, 0, serenity)
     mal = Character("Mal", 10, 0, serenity)
     jess.updateRelationship(mal, -15)
@@ -111,7 +113,7 @@ if __name__ == "__main__":
     initialState = WorldState(0, characters, environments)
 
 
-    loveEvent = VentThroughAirlock()
+    loveEvent = FallInLove()
     preconditions_met, characters, environments = loveEvent.checkPreconditions(initialState)
     if preconditions_met:
         next_worldstate = loveEvent.doEvent(initialState, characters[0], environments)
