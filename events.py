@@ -86,29 +86,3 @@ class FallInLove(PlotFragment):
         char_one.relationships[char_two] += 15 #Change this in the future, environment is a copy (bc deepcopy)
         #print(char_one.relationships[char_two])
         return reachable_worldstate
-
-
-
-
-
-
-if __name__ == "__main__":
-    serenity = Environment("Serenity", 25, False, True)
-    space = Environment("Space", -100, True, False)
-    serenity.setDistance(space, 0)
-    space.setDistance(serenity, 0)
-
-    jess = Character("Jess", 0, serenity, False)
-    mal = Character("Mal", 5, serenity, False)
-    jess.updateRelationship(mal, -15)
-    mal.updateRelationship(jess, 25)
-
-    environments = [serenity, space]
-    characters = [jess, mal]
-
-    initialState = WorldState(0, characters, environments)
-
-    airlockEvent = VentThroughAirlock()
-    preconditions_met, characters = airlockEvent.checkPreconditions(initialState)
-    if preconditions_met:
-        next_worldstate = airlockEvent.doEvent(initialState, characters[0], space)
