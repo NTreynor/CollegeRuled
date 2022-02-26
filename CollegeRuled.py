@@ -1,5 +1,6 @@
 from CollegeRuled import *
 import copy
+import random
 
 from events import VentThroughAirlock, FallInLove
 
@@ -157,15 +158,20 @@ def selectEventIndex(eventList, desiredWorldState):
     #print("attempting to select event index")
     currMinDistanceEventIndex = -1
     currEventMinDistance = 9999
+    equallyValubleIndexes = []
     #print(len(eventList))
     for x in range (len(eventList)):
         #print("x = " + str(x))
         currEventValue = distanceBetweenWorldstates(desiredWorldState, eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3]))
         if (currEventValue < currEventMinDistance):
+            equallyValubleIndexes = []
             currEventMinDistance = currEventValue
             currMinDistanceEventIndex = x
+            equallyValubleIndexes.append(x)
+        if (currEventValue == currEventMinDistance):
+            equallyValubleIndexes.append(x)
 
-    return currMinDistanceEventIndex # Return the index of the event with the lowest distance to the desiredWorldState
+    return random.choice(equallyValubleIndexes) # Return the index of the event with the lowest distance to the desiredWorldState
 
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
