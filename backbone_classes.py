@@ -6,17 +6,18 @@ from events import VentThroughAirlock, FallInLove
 
 
 class Character:
-    def __init__(self, name, health, happiness, location):
+    def __init__(self, name, health=None, happiness=None, location=None, has_job=None, exploited=None, \
+        murderer=None, stole=None, fugitive=None, relationships = {}, romantic_interest=None):
         self.name = name
         self.health = health # scale of 0 to 10
         self.happiness = happiness # scale of 0 to 10
-        self.has_job = False
-        self.exploited = False
-        self.murderer = False
-        self.stole = False
-        self.fugitive = False
-        self.relationships = {} # key: other character, val: [-100, 100]
-        self.romantic_interest = None  # will be the name of the romantic interest
+        self.has_job = has_job
+        self.exploited = exploited
+        self.murderer = murderer
+        self.stole = stole
+        self.fugitive = fugitive
+        self.relationships = relationships # key: other character, val: [-100, 100]
+        self.romantic_interest = romantic_interest  # will be the name of the romantic interest
         self.location = location
         # self.in_spacesuit = False
 

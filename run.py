@@ -1,24 +1,30 @@
-def run_story(worldstate, possibleEvents, depthLimit):
+from backbone_classes import *
+from events import *
+from path_finding import *
+
+def get_runable_events(current_worldstate, possible_events):
+    runableEvents = []
+    for event in possibleEvents: # Check to see if an instance of an event is runnable
+        preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
+        if preconditions_met: # If so, add all possible instances to the list of runnable events
+            for x in range(len(characters)):
+                runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+    return runableEvents
+
+
+def run_story(current_worldstate, possibleEvents, depthLimit, waypoints = None):
     if (depthLimit == 0):
         return
-    runnableEvents = []
-    for event in possibleEvents: # Check to see if an instance of an event is runnable
-        preconditions_met, characters, environments = event.checkPreconditions(worldstate)
-        if preconditions_met: # If so, add all possible instances to the list of runnable events
-            #print("length of characters: " + str(len(characters)))
-            for x in range(len(characters)):
-                #print(x)
-                # Store the event, and it's parameters
-                runnableEvents.append([event, worldstate, characters[x], environments[x]])
-
+    
+    runableEvents = get_runable_events(current_worldstate, possibleEvents)
     # Now we would want to select an event to run.
-    desiredWorldState = worldstate # TODO: Replace this with an actual goal worldstate
-    indexOfEventToRun = selectEventIndex(runnableEvents, desiredWorldState)
+    desiredWorldState = current_worldstate # TODO: Replace this with an actual goal worldstate
+    indexOfEventToRun = selectEventIndex(runableEvents, desiredWorldState)
     #print(indexOfEventToRun)
-    event = runnableEvents[indexOfEventToRun][0]
-    worldStateToRun = runnableEvents[indexOfEventToRun][1]
-    charsToUse = runnableEvents[indexOfEventToRun][2]
-    environmentsToUse = runnableEvents[indexOfEventToRun][3]
+    event = runableEvents[indexOfEventToRun][0]
+    worldStateToRun = runableEvents[indexOfEventToRun][1]
+    charsToUse = runableEvents[indexOfEventToRun][2]
+    environmentsToUse = runableEvents[indexOfEventToRun][3]
     next_worldstate = event.doEvent(worldStateToRun, charsToUse, environmentsToUse)
 
     run_story(next_worldstate, possibleEvents, depthLimit-1)
