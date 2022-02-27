@@ -20,12 +20,21 @@ class VentThroughAirlock(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+
+
+        indexOfSpace = 0
+        for environment in worldstate.environments:
+            if environment.name == "Space":
+                space = environment
+                indexOfSpace = worldstate.environments.index(space)
+                #print("Index of space found: ")
+                #print(indexOfSpace)
         for character in worldstate.characters:
             if character.location.has_airlock:
                 for character2 in character.relationships:
                     if (character.relationships[character2] < 0) & character.sameLoc(character2):
                         valid_characters.append([character, character2])
-                        environments.append([])
+                        environments.append(worldstate.environments[indexOfSpace])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -36,7 +45,7 @@ class VentThroughAirlock(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         reachable_worldstate.index += 1
         print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
-        reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
+        reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = reachable_worldstate.environments[worldstate.environments.index(environment)] #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
