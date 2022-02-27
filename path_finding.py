@@ -27,10 +27,11 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     for character in currWorldState.characters:
         for future_character in newWorldState.characters:
             if future_character.name == character.name:
-                distance += character.getDistanceToFutureState(future_character)
+                distance += character.getDistanceToFutureState(future_character.getAttributes())
     # TODO: do something more interesting with drama distance
     drama_distance = abs(currWorldState.drama_score ** 2 - newWorldState.drama_score**2)**(1/2)
     print("Distance between world states is {}".format(distance))
+    #return 5
     return distance
 
 

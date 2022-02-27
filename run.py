@@ -17,6 +17,9 @@ def run_story(current_worldstate, possibleEvents, depthLimit, waypoints = None):
         return
     
     runableEvents = get_runable_events(current_worldstate, possibleEvents)
+    if len(runableEvents) == 0:
+        print("No more events are possible. Fin.")
+        return
     # Now we would want to select an event to run.
     desiredWorldState = current_worldstate # TODO: Replace this with an actual goal worldstate
     indexOfEventToRun = selectEventIndex(runableEvents, desiredWorldState)
