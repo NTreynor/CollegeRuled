@@ -34,14 +34,12 @@ class VentThroughAirlock(PlotFragment):
 
     def doEvent(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
-        reachable_worldstate.index += 1
         print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
-        reachable_worldstate.index += 1
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
@@ -62,27 +60,56 @@ class FallInLove(PlotFragment):
 
     def doEvent(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
-        reachable_worldstate.index += 1
         print("{} looks at {} and realizes they have been slowly growing attached to them as they have spent time together. They feel a stronger desire to be around them".format(characters[0].name, characters[1].name))
-        char_one_index = worldstate.characters.index(characters[0])
+        char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
-        char_one = reachable_worldstate.characters[char_one_index]
+        char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        print(str(char_one.name) + "'s relationship towards " + str(char_two.name) + " was: ")
-        print(char_one.relationships[char_two])
+        print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
+        print(char.relationships[char_two])
         print("and is now: ")
-        char_one.relationships[char_two] += 15 #Change this in the future, environment is a copy (bc deepcopy)
-        print(char_one.relationships[char_two])
+        char.relationships[char_two] += 15 #Change this in the future, environment is a copy (bc deepcopy)
+        print(char.relationships[char_two])
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
-        #print("{} looks at {} and realizes they have been slowly growing attached to them as they have spent time together. They feel a stronger desire to be around them".format(characters[0].name, characters[1].name))
-        char_one_index = worldstate.characters.index(characters[0])
+        char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
-        char_one = reachable_worldstate.characters[char_one_index]
+        char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        #print(char_one.relationships[char_two])
-        char_one.relationships[char_two] += 15 #Change this in the future, environment is a copy (bc deepcopy)
-        #print(char_one.relationships[char_two])
+        char.relationships[char_two] += 15 
+        return reachable_worldstate
+
+class getJob(PlotFragment):
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            if not (character.has_job or character.fugitive):
+                valid_characters.append([character])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        print("After trying on dozens of business casual outfits and suffering through ", \
+            "awkward interviews, {} got a job.".format(characters[0].name))
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        prev_char = worldstate.characters.index(char_index)
+        char.updateHealth(2)
+        char.updateHappiness(4)
+        print(str(char.name) + "'s health was {} and is now {}.".format(prev_char.health, char.health))
+        print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
+        return reachable_worldstate
+    
+    def getNewWorldstate(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHealth(2)
+        char.updateHappiness(4)
         return reachable_worldstate
