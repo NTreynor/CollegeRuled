@@ -20,7 +20,7 @@ class Character:
         self.stole = stole  # boolean
         self.fugitive = fugitive  # boolean
         self.relationships = relationships # key: other character, val: [-100, 100]
-        if relationships = None:
+        if relationships == None:
             self.relationships = {}
         self.romantic_interest = romantic_interest  # will be the name of the romantic interest
         self.location = location  # string
@@ -55,7 +55,7 @@ class Character:
                 dist = 0
             else:
                 dist = 50
-        elif attribute_idx = 9:  # location
+        elif attribute_idx == 9:  # location
             dist = 0
         return dist
 
