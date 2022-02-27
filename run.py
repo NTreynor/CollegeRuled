@@ -39,8 +39,8 @@ if __name__ == "__main__":
     space.setDistance(serenity, 0)
 
     # Character & Relationship Initialization
-    jess = Character("Jess", 10, 0, serenity)
-    mal = Character("Mal", 10, 0, serenity)
+    jess = Character("Jess", health=10, happiness=0, location=serenity)
+    mal = Character("Mal", health=10, happiness=0, location=serenity)
     jess.updateRelationship(mal, -15)
     mal.updateRelationship(jess, 25)
 
