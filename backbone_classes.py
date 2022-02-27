@@ -1,3 +1,6 @@
+from xmlrpc.client import Boolean
+
+from pandas import BooleanDtype
 from backbone_classes import *
 import copy
 import random
@@ -6,20 +9,65 @@ from events import VentThroughAirlock, FallInLove
 
 
 class Character:
-    def __init__(self, name, health=None, happiness=None, location=None, has_job=None, exploited=None, \
-        murderer=None, stole=None, fugitive=None, relationships = {}, romantic_interest=None):
-        self.name = name
+    def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
+        murderer=None, stole=None, fugitive=None, relationships = None, romantic_interest=None, location=None):
+        self.name = name  # string
         self.health = health # scale of 0 to 10
         self.happiness = happiness # scale of 0 to 10
-        self.has_job = has_job
-        self.exploited = exploited
-        self.murderer = murderer
-        self.stole = stole
-        self.fugitive = fugitive
+        self.has_job = has_job  # boolean
+        self.exploited = exploited  # boolean
+        self.murderer = murderer  # boolean
+        self.stole = stole  # boolean
+        self.fugitive = fugitive  # boolean
         self.relationships = relationships # key: other character, val: [-100, 100]
+        if relationships = None:
+            self.relationships = {}
         self.romantic_interest = romantic_interest  # will be the name of the romantic interest
-        self.location = location
+        self.location = location  # string
         # self.in_spacesuit = False
+    
+    def getAttributes(self):
+        """ for waypointing """
+        return [self.health, self.happiness, self.has_job, self.exploited, self.murderer, \
+            self.stole, self.fugitive, self.relationships, self.romantic_interest, self.location]
+
+    def getAttributeDistance(self, attribute_idx, attribute_value):
+        if attribute_idx in [0, 1]:  # health or happiness
+            dist = (self.getAttributes()[attribute_idx] * 5)**2 - (attribute_value * 5)**2 
+            dist = abs(dist)
+            dist = dist**(1/2)    
+        elif attribute_idx in [2, 3, 4, 5, 6]:  # booleans
+            dist = 50
+            if self.getAttributes()[attribute_idx] == attribute_value:
+                dist = 0
+        elif attribute_idx == 7:  #  relationships
+            dist = 0
+            for character in attribute_value:
+                if character in self.relationships:
+                    char_dist = (self.relationships[character] * 1/4)**2 - (attribute_value[character] * 1/4) ** 2
+                else:
+                    char_dist = (attribute_value[character] * 1/4) ** 2  # initialize relationship as 0
+                char_dist = abs(dist)
+                char_dist = char_dist**(1/2)
+                dist += char_dist
+        elif attribute_idx == 8:  # romantic interest
+            if self.romantic_interest == attribute_value:
+                dist = 0
+            else:
+                dist = 50
+        elif attribute_idx = 9:  # location
+            dist = 0
+        return dist
+
+
+    
+    def getDistanceToFutureState(self, future_state_attributes):
+        distance = 0
+        for idx, attribute in enumerate(future_state_attributes):
+            if attribute:
+                distance += self.getAttributeDistance(idx, attribute)
+        return distance
+
 
     def updateRelationship(self, other_character, relationship_change):
         """ 
