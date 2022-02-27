@@ -1,9 +1,4 @@
-from xmlrpc.client import Boolean
-
-from pandas import BooleanDtype
 from backbone_classes import *
-import copy
-import random
 
 from events import VentThroughAirlock, FallInLove
 
