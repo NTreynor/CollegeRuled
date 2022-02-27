@@ -58,16 +58,15 @@ class Character:
         elif attribute_idx == 9:  # location
             dist = 0
         return dist
-
-
     
     def getDistanceToFutureState(self, future_state_attributes):
+        """ returns distance between current state of character
+        and future state of character"""
         distance = 0
         for idx, attribute in enumerate(future_state_attributes):
             if attribute:
                 distance += self.getAttributeDistance(idx, attribute)
         return distance
-
 
     def updateRelationship(self, other_character, relationship_change):
         """ 

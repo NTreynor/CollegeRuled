@@ -22,9 +22,15 @@ def selectEventIndex(eventList, desiredWorldState):
 
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
-    #TODO: IMPLEMENT THIS PROPERLY
-    #print("Distance between world states is 5")
-    return 5
+    distance = 0
+    for character in currWorldState.characters:
+        for future_character in newWorldState.characters:
+            if future_character.name == character.name:
+                distance += character.getDistanceToFutureState(future_character)
+    # TODO: do something more interesting with drama distance
+    drama_distance = abs(currWorldState.drama_score ** 2 - newWorldState.drama_score**2)**(1/2)
+    print("Distance between world states is {}".format(distance))
+    return distance
 
 
 def run_story(worldstate, possibleEvents, depthLimit):
