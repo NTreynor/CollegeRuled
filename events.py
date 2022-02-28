@@ -221,7 +221,7 @@ class GoToSpaceJail(PlotFragment):
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
         char.updateHappiness(-5)
-        self.sendCharacterToJail(char)
+        self.sendCharacterToJail(char, reachable_worldstate)
         return reachable_worldstate
     
     def sendCharacterToJail(character, worldstate):
@@ -231,4 +231,5 @@ class GoToSpaceJail(PlotFragment):
                 jail = location
         if not jail:
             jail = Environment("Space Jail", -2, False, True) 
+            worldstate.environments.append(jail)
         character.location = jail
