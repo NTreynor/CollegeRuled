@@ -27,6 +27,7 @@ class Character:
             self.stole, self.fugitive, self.relationships, self.romantic_interest, self.location]
 
     def getAttributeDistance(self, attribute_idx, attribute_value):
+        #TODO: fix distance function, you wrote it wrong; single line distance doesn't need sqrt
         if attribute_idx in [0, 1]:  # health or happiness
             dist = (self.getAttributes()[attribute_idx] * 5)**2 - (attribute_value * 5)**2 
             dist = abs(dist)
