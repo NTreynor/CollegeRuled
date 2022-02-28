@@ -1,23 +1,6 @@
 from backbone_classes import *
 import copy
 
-class PlotFragment:
-    def __init__(self):
-        self.drama = 0  # out of 20
-        return
-
-    def checkPreconditions(self, worldstate):
-        """ return a boolean if the event can happen,
-        the characters involved, environments, and the updated drama score"""
-        return
-
-    def doEvent(self, worldstate, characters, environment):
-        return
-
-    def getNewWorldstate(self, worldstate, characters, environment):
-        return
-
-
 class VentThroughAirlock(PlotFragment):
     def __init__(self):
         self.drama = 20
