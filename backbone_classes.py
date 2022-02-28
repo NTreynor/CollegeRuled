@@ -105,6 +105,11 @@ class Character:
         elif new_happiness < 0:
             new_happiness = 0
         self.happiness = new_happiness
+    
+    def isDead(self):
+        if self.health == 0:
+            return True
+        return False
 
     def sameLoc(self, other_character):
         return self.location == other_character.location
@@ -134,6 +139,12 @@ class WorldState:
         self.characters = characters
         self.environments = environments
         self.drama_score = 0
+    
+    def removeCharacter(self, character):
+        for other_character in self.characters:
+                if character in other_character.relationships:
+                    del other_character.relationships[character]
+        self.characters.remove(character)
 
     def __str__(self):
         return ""

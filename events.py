@@ -178,12 +178,9 @@ class HitBySpaceCar(PlotFragment):
         char_two.updateRelationship(char_one, -10)
         char_two.updateHealth(-6)
         print("{} hits {} with their spacecar.".format(char_one.name, char_two.name))
-        if char_two.health == 0:  # kill character
+        if char_two.isDead():  # kill character
             self.drama += 5  # more dramatic if character dies
-            for character in reachable_worldstate:
-                if char_two in character.relationships:
-                    del character.relationships[char_one]
-            reachable_worldstate.characters.remove(char_one)
+            reachable_worldstate.removeCharacter(char_two, worldstate)
             print("As {} lay there on the spaceway, they stared up at two moons rising over the dusky" \
                 " horizon. Then they closed their eyes for the last time.".format(char_two.name)) 
             char_two.murderer = True
@@ -202,12 +199,9 @@ class HitBySpaceCar(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char_one = reachable_worldstate.characters[char_one_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        if char_one.health == 0:  # kill character
-            self.drama += 5
-            for character in reachable_worldstate:
-                if char_one in character.relationships:
-                    del character.relationships[char_one]
-            reachable_worldstate.characters.remove(char_one)
+        if char_two.isDead():  # kill character
+            self.drama += 5  # more dramatic if character dies
+            reachable_worldstate.removeCharacter(char_two, worldstate)
         else:
             char_one.updateRelationship(char_two, 2)
             char_two.updateRelationship(char_one, -10)
