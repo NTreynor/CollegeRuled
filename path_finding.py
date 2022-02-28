@@ -9,8 +9,12 @@ def selectEventIndex(eventList, desiredWorldState):
     equallyValubleIndexes = []
     #print(len(eventList))
     for x in range (len(eventList)):
+
+        print("Index in list of events checked:")
+        print(x)
         #print("x = " + str(x))
-        currEventValue = distanceBetweenWorldstates(desiredWorldState, eventList[x][0].getNewWorldstate(eventList[x][1], eventList[x][2], eventList[x][3]))
+        reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
+        currEventValue = distanceBetweenWorldstates(desiredWorldState, reachable_worldstate)
         if (currEventValue < currEventMinDistance):
             equallyValubleIndexes = []
             currEventMinDistance = currEventValue

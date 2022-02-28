@@ -1,6 +1,22 @@
 from backbone_classes import *
 import copy
 
+class PlotFragment:
+    def __init__(self):
+        self.drama = 0  # out of 20
+        return
+
+    def checkPreconditions(self, worldstate):
+        """ return a boolean if the event can happen,
+        the characters involved, environments, and the updated drama score"""
+        return
+
+    def doEvent(self, worldstate, characters, environment):
+        return
+
+    def getNewWorldState(self, worldstate, characters, environment):
+        return
+
 class VentThroughAirlock(PlotFragment):
     def __init__(self):
         self.drama = 20
@@ -36,6 +52,8 @@ class VentThroughAirlock(PlotFragment):
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
+
+        print("Is this the source of error? - Airlock")
         reachable_worldstate = copy.deepcopy(worldstate)
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         reachable_worldstate.drama_score += self.drama
@@ -76,6 +94,8 @@ class FallInLove(PlotFragment):
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
+
+        print("Is this the source of error? - Love")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
@@ -116,7 +136,9 @@ class GetJob(PlotFragment):
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
-    def getNewWorldstate(self, worldstate, characters, environment):
+    def getNewWorldState(self, worldstate, characters, environment):
+
+        print("Is this the source of error? - GetJob")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
@@ -176,7 +198,9 @@ class HitBySpaceCar(PlotFragment):
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
-    def getNewWorldstate(self, worldstate, characters, environment):
+    def getNewWorldState(self, worldstate, characters, environment):
+
+        print("Is this the source of error? - Spacecar")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_one_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
@@ -220,7 +244,8 @@ class GoToSpaceJail(PlotFragment):
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
-    def getNewWorldstate(self, worldstate, characters, environment):
+    def getNewWorldState(self, worldstate, characters, environment):
+        print("Is this the source of error? - SpaceJail")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
