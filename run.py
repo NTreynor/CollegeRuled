@@ -63,7 +63,8 @@ if __name__ == "__main__":
     #if preconditions_met:
     #    next_worldstate = airlockEvent.doEvent(initialState, characters[0], space)
 
-    possibleEvents = [loveEvent, airlockEvent]
+
+    possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
 
     run_story(initialState, possibleEvents, 5)
 

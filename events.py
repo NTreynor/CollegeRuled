@@ -3,6 +3,7 @@ import copy
 
 class PlotFragment:
     def __init__(self):
+        self.drama = 5
         return
 
     def checkPreconditions(self, worldstate):
