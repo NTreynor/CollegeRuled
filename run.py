@@ -2,7 +2,7 @@ from backbone_classes import *
 from events import *
 from path_finding import *
 
-def get_runable_events(current_worldstate, possible_events):
+def getRunableEvents(current_worldstate, possible_events):
     runableEvents = []
     for event in possibleEvents: # Check to see if an instance of an event is runnable
         preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
@@ -12,25 +12,24 @@ def get_runable_events(current_worldstate, possible_events):
     return runableEvents
 
 
-def run_story(current_worldstate, possibleEvents, depthLimit, waypoints = None):
-    if (depthLimit == 0):
+def runStory(current_worldstate, possible_events, depth_limit, waypoints = None):
+    if (depth_limit == 0):
         return
     
-    runableEvents = get_runable_events(current_worldstate, possibleEvents)
-    if len(runableEvents) == 0:
+    runable_events = getRunableEvents(current_worldstate, possible_events)
+    if len(runable_events) == 0:
         print("No more events are possible. Fin.")
         return
     # Now we would want to select an event to run.
-    desiredWorldState = current_worldstate # TODO: Replace this with an actual goal worldstate
-    indexOfEventToRun = selectEventIndex(runableEvents, desiredWorldState)
-    #print(indexOfEventToRun)
-    event = runableEvents[indexOfEventToRun][0]
-    worldStateToRun = runableEvents[indexOfEventToRun][1]
-    charsToUse = runableEvents[indexOfEventToRun][2]
-    environmentsToUse = runableEvents[indexOfEventToRun][3]
-    next_worldstate = event.doEvent(worldStateToRun, charsToUse, environmentsToUse)
+    desired_world_state = current_worldstate # TODO: Replace this with an actual goal worldstate
+    idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)
+    event = runable_events[idx_of_event_to_run][0]
+    worldstate_to_run = runable_events[idx_of_event_to_run][1]
+    chars_to_use = runable_events[idx_of_event_to_run][2]
+    environments_to_use = runable_events[idx_of_event_to_run][3]
+    next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
 
-    run_story(next_worldstate, possibleEvents, depthLimit-1)
+    runStory(next_worldstate, possible_events, depth_limit-1)
     return
 
 
@@ -66,6 +65,6 @@ if __name__ == "__main__":
 
     possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
 
-    run_story(initialState, possibleEvents, 5)
+    runStory(initialState, possibleEvents, 5)
 
 
