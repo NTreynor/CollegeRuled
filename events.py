@@ -100,6 +100,7 @@ class GetJob(PlotFragment):
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
                 valid_characters.append([character])
+                environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -200,6 +201,7 @@ class GoToSpaceJail(PlotFragment):
         for character in worldstate.characters:
             if (character.stole or character.exploited or character.murderer or character.fugitive):
                 valid_characters.append([character])
+                environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
