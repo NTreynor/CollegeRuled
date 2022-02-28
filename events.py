@@ -53,7 +53,7 @@ class VentThroughAirlock(PlotFragment):
 
     def getNewWorldState(self, worldstate, characters, environment):
 
-        print("Is this the source of error? - Airlock")
+        #print("Is this the source of error? - Airlock")
         reachable_worldstate = copy.deepcopy(worldstate)
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         reachable_worldstate.drama_score += self.drama
@@ -85,17 +85,17 @@ class FallInLove(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
-        print(char.relationships[char_two])
-        print("and is now: ")
+        #print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
+        #print(char.relationships[char_two])
+        #print("and is now: ")
         char.updateRelationship(char_two, 15)
-        print(char.relationships[char_two])
+        #print(char.relationships[char_two])
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
 
-        print("Is this the source of error? - Love")
+        #print("Is this the source of error? - Love")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
@@ -138,7 +138,7 @@ class GetJob(PlotFragment):
     
     def getNewWorldState(self, worldstate, characters, environment):
 
-        print("Is this the source of error? - GetJob")
+        #print("Is this the source of error? - GetJob")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
@@ -200,7 +200,7 @@ class HitBySpaceCar(PlotFragment):
     
     def getNewWorldState(self, worldstate, characters, environment):
 
-        print("Is this the source of error? - Spacecar")
+        #print("Is this the source of error? - Spacecar")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_one_index = worldstate.characters.index(characters[0])
         char_two_index = worldstate.characters.index(characters[1])
@@ -245,7 +245,7 @@ class GoToSpaceJail(PlotFragment):
         return reachable_worldstate
     
     def getNewWorldState(self, worldstate, characters, environment):
-        print("Is this the source of error? - SpaceJail")
+        #print("Is this the source of error? - SpaceJail")
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]

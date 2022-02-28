@@ -67,6 +67,6 @@ if __name__ == "__main__":
     possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
 
     runStory(initialState, possibleEvents, 5)
-    print(distanceBetweenWorldstates(initialState, updateState))
+    #print(distanceBetweenWorldstates(initialState, updateState))
 
 

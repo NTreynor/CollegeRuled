@@ -10,8 +10,8 @@ def selectEventIndex(eventList, desiredWorldState):
     #print(len(eventList))
     for x in range (len(eventList)):
 
-        print("Index in list of events checked:")
-        print(x)
+        #print("Index in list of events checked:")
+        #print(x)
         #print("x = " + str(x))
         reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
         currEventValue = distanceBetweenWorldstates(desiredWorldState, reachable_worldstate)
@@ -35,5 +35,5 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
                     distance += character.getDistanceToFutureState(future_character.getAttributes())
     drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
     distance += drama_distance
-    print("Distance between world states is {}".format(distance))
+    #print("Distance between world states is {}".format(distance))
     return distance
