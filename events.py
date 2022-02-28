@@ -16,11 +16,11 @@ class PlotFragment:
     def getNewWorldstate(self, worldstate, characters, environment):
         return
 
+
 class VentThroughAirlock(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
-
 
         indexOfSpace = 0
         for environment in worldstate.environments:
@@ -52,6 +52,7 @@ class VentThroughAirlock(PlotFragment):
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
+
 class FallInLove(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -77,7 +78,7 @@ class FallInLove(PlotFragment):
         print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
         print(char.relationships[char_two])
         print("and is now: ")
-        char.relationships[char_two] += 15 #Change this in the future, environment is a copy (bc deepcopy)
+        char.updateRelationship(char_two, 15)
         print(char.relationships[char_two])
         return reachable_worldstate
 
@@ -87,10 +88,11 @@ class FallInLove(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        char.relationships[char_two] += 15 
+        char.updateRelationship(char_two, 15)
         return reachable_worldstate
 
-class getJob(PlotFragment):
+
+class GetJob(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
@@ -121,4 +123,54 @@ class getJob(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char.updateHealth(2)
         char.updateHappiness(4)
+        return reachable_worldstate
+
+
+class HitBySpaceCar(PlotFragment):
+    """ 
+    My roommates say if they hit someone with a spacecar, they'd
+    be more inclined towards being kind to that person. So the driver's
+    relationship to the victim will go up, and the victim's relationship to
+    the driver will go down.
+    """
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+                for character2 in character.relationships:
+                    valid_characters.append([character, character2])
+                    environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        prev_char_one = worldstate.characters[char_one_index]
+        prev_char_two = worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, 2)
+        char_two.updateRelationship(char_one, -10)
+        print("{} hits {} with their spacecar. Don't drink and drive, kids!".format(char_one.name, char_two.name))
+        print("{}'s relationship towards {} was {} and is now {}.".format(char_one.name, char_two.name, \
+            prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
+        print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
+            prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
+        return reachable_worldstate
+    
+    def getNewWorldstate(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        prev_char_one = worldstate.characters[char_one_index]
+        prev_char_two = worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, 2)
+        char_two.updateRelationship(char_one, -10)
         return reachable_worldstate
