@@ -138,9 +138,10 @@ class HitBySpaceCar(PlotFragment):
         valid_characters = []
         environments = []
         for character in worldstate.characters:
-                for character2 in character.relationships:
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                for character2 in worldstate.characters:
+                    if character != character 2:
+                        valid_characters.append([character, character2])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -161,6 +162,12 @@ class HitBySpaceCar(PlotFragment):
             prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
         print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
             prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
+        char_two.updateHealth(-6)
+        if char_one.health == 0:  # kill character
+            for character in reachable_worldstate:
+                if char_one in character.relationships:
+                    del character.relationships[char_one]
+            reachable_worldstate.characters.remove(char_one)
         return reachable_worldstate
     
     def getNewWorldstate(self, worldstate, characters, environment):
