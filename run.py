@@ -1,27 +1,35 @@
-def run_story(worldstate, possibleEvents, depthLimit):
-    if (depthLimit == 0):
-        return
-    runnableEvents = []
+from backbone_classes import *
+from events import *
+from path_finding import *
+
+def getRunableEvents(current_worldstate, possible_events):
+    runableEvents = []
     for event in possibleEvents: # Check to see if an instance of an event is runnable
-        preconditions_met, characters, environments = event.checkPreconditions(worldstate)
+        preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
         if preconditions_met: # If so, add all possible instances to the list of runnable events
-            #print("length of characters: " + str(len(characters)))
             for x in range(len(characters)):
-                #print(x)
-                # Store the event, and it's parameters
-                runnableEvents.append([event, worldstate, characters[x], environments[x]])
+                runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+    return runableEvents
 
+
+def runStory(current_worldstate, possible_events, depth_limit, waypoints = None):
+    if (depth_limit == 0):
+        return
+    
+    runable_events = getRunableEvents(current_worldstate, possible_events)
+    if len(runable_events) == 0:
+        print("No more events are possible. Fin.")
+        return
     # Now we would want to select an event to run.
-    desiredWorldState = worldstate # TODO: Replace this with an actual goal worldstate
-    indexOfEventToRun = selectEventIndex(runnableEvents, desiredWorldState)
-    #print(indexOfEventToRun)
-    event = runnableEvents[indexOfEventToRun][0]
-    worldStateToRun = runnableEvents[indexOfEventToRun][1]
-    charsToUse = runnableEvents[indexOfEventToRun][2]
-    environmentsToUse = runnableEvents[indexOfEventToRun][3]
-    next_worldstate = event.doEvent(worldStateToRun, charsToUse, environmentsToUse)
+    desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
+    idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)
+    event = runable_events[idx_of_event_to_run][0]
+    worldstate_to_run = runable_events[idx_of_event_to_run][1]
+    chars_to_use = runable_events[idx_of_event_to_run][2]
+    environments_to_use = runable_events[idx_of_event_to_run][3]
+    next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
 
-    run_story(next_worldstate, possibleEvents, depthLimit-1)
+    runStory(next_worldstate, possible_events, depth_limit-1)
     return
 
 
@@ -33,8 +41,8 @@ if __name__ == "__main__":
     space.setDistance(serenity, 0)
 
     # Character & Relationship Initialization
-    jess = Character("Jess", 10, 0, serenity)
-    mal = Character("Mal", 10, 0, serenity)
+    jess = Character("Jess", health=10, happiness=0, location=serenity)
+    mal = Character("Mal", health=10, happiness=0, location=serenity)
     jess.updateRelationship(mal, -15)
     mal.updateRelationship(jess, 25)
 
@@ -42,6 +50,7 @@ if __name__ == "__main__":
     characters = [jess, mal]
 
     initialState = WorldState(0, characters, environments)
+    updateState = WorldState(1, [Character("Jess", health=12)], environments)
 
 
     loveEvent = FallInLove()
@@ -54,8 +63,10 @@ if __name__ == "__main__":
     #if preconditions_met:
     #    next_worldstate = airlockEvent.doEvent(initialState, characters[0], space)
 
-    possibleEvents = [loveEvent, airlockEvent]
 
-    run_story(initialState, possibleEvents, 5)
+    possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
+
+    runStory(initialState, possibleEvents, 5)
+    #print(distanceBetweenWorldstates(initialState, updateState))
 
 

@@ -1,24 +1,63 @@
 from backbone_classes import *
-import copy
-import random
-
-from events import VentThroughAirlock, FallInLove
 
 
 class Character:
-    def __init__(self, name, health, happiness, location):
-        self.name = name
+    def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
+        murderer=None, stole=None, fugitive=None, relationships = None, romantic_interest=None, location=None):
+        self.name = name  # string
         self.health = health # scale of 0 to 10
         self.happiness = happiness # scale of 0 to 10
-        self.has_job = False
-        self.exploited = False
-        self.murderer = False
-        self.stole = False
-        self.fugitive = False
-        self.relationships = {} # key: other character, val: [-100, 100]
-        self.romantic_interest = None  # will be the name of the romantic interest
-        self.location = location
+        self.has_job = has_job  # boolean
+        self.exploited = exploited  # boolean
+        self.murderer = murderer  # boolean
+        self.stole = stole  # boolean
+        self.fugitive = fugitive  # boolean
+        self.relationships = relationships # key: other character, val: [-100, 100]
+        if relationships == None:
+            self.relationships = {}
+        self.romantic_interest = romantic_interest  # will be the name of the romantic interest
+        self.location = location  # string
         # self.in_spacesuit = False
+    
+    def getAttributes(self):
+        """ for waypointing """
+        return [self.health, self.happiness, self.has_job, self.exploited, self.murderer, \
+            self.stole, self.fugitive, self.relationships, self.romantic_interest, self.location]
+
+    def getAttributeDistance(self, attribute_idx, attribute_value):
+        if attribute_idx in [0, 1]:  # health or happiness
+            dist = (self.getAttributes()[attribute_idx] - attribute_value) * 5 
+            dist = abs(dist)
+        elif attribute_idx in [2, 3, 4, 5, 6]:  # booleans
+            dist = 50
+            if self.getAttributes()[attribute_idx] == attribute_value:
+                dist = 0
+        elif attribute_idx == 7:  #  relationships
+            dist = 0
+            for character in attribute_value:
+                if character in self.relationships:
+                    char_dist = (self.relationships[character] - attribute_value[character]) * 1/4
+                else:
+                    char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
+                char_dist = abs(dist)
+                dist += char_dist
+        elif attribute_idx == 8:  # romantic interest
+            if self.romantic_interest == attribute_value:
+                dist = 0
+            else:
+                dist = 50
+        elif attribute_idx == 9:  # location
+            dist = 0
+        return dist
+    
+    def getDistanceToFutureState(self, future_state_attributes):
+        """ returns distance between current state of character
+        and future state of character"""
+        distance = 0
+        for idx, attribute in enumerate(future_state_attributes):
+            if attribute:
+                distance += self.getAttributeDistance(idx, attribute)
+        return distance
 
     def updateRelationship(self, other_character, relationship_change):
         """ 
@@ -62,6 +101,11 @@ class Character:
         elif new_happiness < 0:
             new_happiness = 0
         self.happiness = new_happiness
+    
+    def isDead(self):
+        if self.health == 0:
+            return True
+        return False
 
     def sameLoc(self, other_character):
         return self.location == other_character.location
@@ -91,6 +135,12 @@ class WorldState:
         self.characters = characters
         self.environments = environments
         self.drama_score = 0
+    
+    def removeCharacter(self, character):
+        for other_character in self.characters:
+                if character in other_character.relationships:
+                    del other_character.relationships[character]
+        self.characters.remove(character)
 
     def __str__(self):
         return ""
