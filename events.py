@@ -162,11 +162,12 @@ class HitBySpaceCar(PlotFragment):
         print("{} hits {} with their spacecar.".format(char_one.name, char_two.name))
         if char_two.health == 0:  # kill character
             for character in reachable_worldstate:
-                if char_one in character.relationships:
+                if char_two in character.relationships:
                     del character.relationships[char_one]
             reachable_worldstate.characters.remove(char_one)
             print("As {} lay there on the spaceway, they stared up at two moons rising over the dusky" \
-                " horizon. Then they closed their eyes for the last time.".format(char_two.name))  
+                " horizon. Then they closed their eyes for the last time.".format(char_two.name)) 
+            char_two.murderer = True
         else:
             print("{}'s relationship towards {} was {} and is now {}.".format(char_one.name, char_two.name, \
                 prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
@@ -190,3 +191,44 @@ class HitBySpaceCar(PlotFragment):
             char_one.updateRelationship(char_two, 2)
             char_two.updateRelationship(char_one, -10)
         return reachable_worldstate
+
+
+class GoToSpaceJail(PlotFragment):
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            if (character.stole or character.exploited or character.murderer or character.fugitive):
+                valid_characters.append([character])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        prev_char = worldstate.characters.index(char_index)
+        char.updateHappiness(-5)
+        print("The law finally caught up with {}. They are in jail.".format(characters[0].name))
+        print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
+        self.sendCharacterToJail(char)
+        return reachable_worldstate
+    
+    def getNewWorldstate(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHappiness(-5)
+        self.sendCharacterToJail(char)
+        return reachable_worldstate
+    
+    def sendCharacterToJail(character, worldstate):
+        jail = False
+        for location in worldstate.environments:
+            if location.name == "Space Jail":
+                jail = location
+        if not jail:
+            jail = Environment("Space Jail", -2, False, True) 
+        character.location = jail
