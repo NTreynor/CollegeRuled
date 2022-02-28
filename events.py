@@ -3,7 +3,7 @@ import copy
 
 class PlotFragment:
     def __init__(self):
-        self.drama = 5
+        self.drama = 0  # out of 20
         return
 
     def checkPreconditions(self, worldstate):
@@ -19,6 +19,9 @@ class PlotFragment:
 
 
 class VentThroughAirlock(PlotFragment):
+    def __init__(self):
+        self.drama = 20
+
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
@@ -46,15 +49,20 @@ class VentThroughAirlock(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = reachable_worldstate.environments[worldstate.environments.index(environment)] #Change this in the future, environment is a copy (bc deepcopy)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
         reachable_worldstate = copy.deepcopy(worldstate)
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
 
 class FallInLove(PlotFragment):
+    def __init__(self):
+        self.drama = 11
+
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
@@ -81,6 +89,7 @@ class FallInLove(PlotFragment):
         print("and is now: ")
         char.updateRelationship(char_two, 15)
         print(char.relationships[char_two])
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
     def getNewWorldState(self, worldstate, characters, environment):
@@ -90,10 +99,14 @@ class FallInLove(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
         char.updateRelationship(char_two, 15)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
 
 class GetJob(PlotFragment):
+    def __init__(self):
+        self.drama = 4
+
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
@@ -117,6 +130,7 @@ class GetJob(PlotFragment):
         char.updateHappiness(4)
         print(str(char.name) + "'s health was {} and is now {}.".format(prev_char.health, char.health))
         print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
     def getNewWorldstate(self, worldstate, characters, environment):
@@ -125,6 +139,7 @@ class GetJob(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char.updateHealth(2)
         char.updateHappiness(4)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
 
@@ -135,6 +150,8 @@ class HitBySpaceCar(PlotFragment):
     relationship to the victim will go up, and the victim's relationship to
     the driver will go down.
     """
+    def __init__(self):
+        self.drama = 14
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -162,6 +179,7 @@ class HitBySpaceCar(PlotFragment):
         char_two.updateHealth(-6)
         print("{} hits {} with their spacecar.".format(char_one.name, char_two.name))
         if char_two.health == 0:  # kill character
+            self.drama += 5  # more dramatic if character dies
             for character in reachable_worldstate:
                 if char_two in character.relationships:
                     del character.relationships[char_one]
@@ -175,6 +193,7 @@ class HitBySpaceCar(PlotFragment):
             print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
                 prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
             print("{}'s health is now {}.".format(char_two.name, char_two.health))
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
     def getNewWorldstate(self, worldstate, characters, environment):
@@ -184,6 +203,7 @@ class HitBySpaceCar(PlotFragment):
         char_one = reachable_worldstate.characters[char_one_index]
         char_two = reachable_worldstate.characters[char_two_index]
         if char_one.health == 0:  # kill character
+            self.drama += 5
             for character in reachable_worldstate:
                 if char_one in character.relationships:
                     del character.relationships[char_one]
@@ -191,10 +211,14 @@ class HitBySpaceCar(PlotFragment):
         else:
             char_one.updateRelationship(char_two, 2)
             char_two.updateRelationship(char_one, -10)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
 
 class GoToSpaceJail(PlotFragment):
+    def __init__(self):
+        self.drama = 10
+
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
@@ -216,6 +240,7 @@ class GoToSpaceJail(PlotFragment):
         print("The law finally caught up with {}. They are in jail.".format(characters[0].name))
         print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
         self.sendCharacterToJail(char)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
     def getNewWorldstate(self, worldstate, characters, environment):
@@ -224,6 +249,7 @@ class GoToSpaceJail(PlotFragment):
         char = reachable_worldstate.characters[char_index]
         char.updateHappiness(-5)
         self.sendCharacterToJail(char, reachable_worldstate)
+        reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
     def sendCharacterToJail(character, worldstate):

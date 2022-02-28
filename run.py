@@ -50,6 +50,7 @@ if __name__ == "__main__":
     characters = [jess, mal]
 
     initialState = WorldState(0, characters, environments)
+    updateState = WorldState(1, [Character("Jess", health=12)], environments)
 
 
     loveEvent = FallInLove()
@@ -65,6 +66,7 @@ if __name__ == "__main__":
 
     possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
 
-    runStory(initialState, possibleEvents, 5)
+    # runStory(initialState, possibleEvents, 5)
+    print(distanceBetweenWorldstates(initialState, updateState))
 
 

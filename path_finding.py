@@ -24,14 +24,14 @@ def selectEventIndex(eventList, desiredWorldState):
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
     distance = 0
-    for character in currWorldState.characters:
-        for future_character in newWorldState.characters:
-            if future_character.name == character.name:
-                distance += character.getDistanceToFutureState(future_character.getAttributes())
-    # TODO: do something more interesting with drama distance
-    drama_distance = abs(currWorldState.drama_score ** 2 - newWorldState.drama_score**2)**(1/2)
+    if currWorldState.characters:
+        for character in currWorldState.characters:
+            for future_character in newWorldState.characters:
+                if future_character.name == character.name:
+                    distance += character.getDistanceToFutureState(future_character.getAttributes())
+    drama_distance = abs((currWorldState.drama_score * 5/2) ** 2 - (newWorldState.drama_score * 5/2)**2)**(1/2)
+    distance += drama_distance
     print("Distance between world states is {}".format(distance))
-    #return 5
     return distance
 
 
