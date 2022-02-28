@@ -85,11 +85,11 @@ class FallInLove(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        #print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
-        #print(char.relationships[char_two])
-        #print("and is now: ")
+        print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
+        print(char.relationships[char_two])
+        print("and is now: ")
         char.updateRelationship(char_two, 15)
-        #print(char.relationships[char_two])
+        print(char.relationships[char_two])
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
@@ -128,7 +128,7 @@ class GetJob(PlotFragment):
             "awkward interviews, {} got a job.".format(characters[0].name))
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
-        prev_char = worldstate.characters.index(char_index)
+        prev_char = worldstate.characters[char_index]
         char.updateHealth(2)
         char.updateHappiness(4)
         print(str(char.name) + "'s health was {} and is now {}.".format(prev_char.health, char.health))
