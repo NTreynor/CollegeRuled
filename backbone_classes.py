@@ -27,11 +27,9 @@ class Character:
             self.stole, self.fugitive, self.relationships, self.romantic_interest, self.location]
 
     def getAttributeDistance(self, attribute_idx, attribute_value):
-        #TODO: fix distance function, you wrote it wrong; single line distance doesn't need sqrt
         if attribute_idx in [0, 1]:  # health or happiness
-            dist = (self.getAttributes()[attribute_idx] * 5)**2 - (attribute_value * 5)**2 
+            dist = (self.getAttributes()[attribute_idx] - attribute_value) * 5 
             dist = abs(dist)
-            dist = dist**(1/2)    
         elif attribute_idx in [2, 3, 4, 5, 6]:  # booleans
             dist = 50
             if self.getAttributes()[attribute_idx] == attribute_value:
@@ -40,11 +38,10 @@ class Character:
             dist = 0
             for character in attribute_value:
                 if character in self.relationships:
-                    char_dist = (self.relationships[character] * 1/4)**2 - (attribute_value[character] * 1/4) ** 2
+                    char_dist = (self.relationships[character] - attribute_value[character]) * 1/4
                 else:
-                    char_dist = (attribute_value[character] * 1/4) ** 2  # initialize relationship as 0
+                    char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
                 char_dist = abs(dist)
-                char_dist = char_dist**(1/2)
                 dist += char_dist
         elif attribute_idx == 8:  # romantic interest
             if self.romantic_interest == attribute_value:
