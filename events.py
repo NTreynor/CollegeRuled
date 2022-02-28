@@ -157,20 +157,21 @@ class HitBySpaceCar(PlotFragment):
         prev_char_two = worldstate.characters[char_two_index]
         char_one.updateRelationship(char_two, 2)
         char_two.updateRelationship(char_one, -10)
+        char_two.updateHealth(-6)
         print("{} hits {} with their spacecar.".format(char_one.name, char_two.name))
-        if char_one.health == 0:  # kill character
+        if char_two.health == 0:  # kill character
             for character in reachable_worldstate:
                 if char_one in character.relationships:
                     del character.relationships[char_one]
             reachable_worldstate.characters.remove(char_one)
             print("As {} lay there on the spaceway, they stared up at two moons rising over the dusky" \
-                " horizon. Then they closed their eyes for the last time.")  
+                " horizon. Then they closed their eyes for the last time.".format(char_two.name))  
         else:
             print("{}'s relationship towards {} was {} and is now {}.".format(char_one.name, char_two.name, \
                 prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
             print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
                 prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
-            char_two.updateHealth(-6)
+            print("{}'s health is now {}.".format(char_two.name, char_two.health))
         return reachable_worldstate
     
     def getNewWorldstate(self, worldstate, characters, environment):
