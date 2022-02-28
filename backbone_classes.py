@@ -1,7 +1,5 @@
 from backbone_classes import *
 
-from events import VentThroughAirlock, FallInLove
-
 
 class Character:
     def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
