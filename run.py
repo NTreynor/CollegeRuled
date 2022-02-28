@@ -21,7 +21,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
         print("No more events are possible. Fin.")
         return
     # Now we would want to select an event to run.
-    desired_world_state = current_worldstate # TODO: Replace this with an actual goal worldstate
+    desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
     idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
 
-    # runStory(initialState, possibleEvents, 5)
+    runStory(initialState, possibleEvents, 5)
     print(distanceBetweenWorldstates(initialState, updateState))
 
 

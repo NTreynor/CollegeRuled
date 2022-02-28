@@ -22,14 +22,14 @@ def selectEventIndex(eventList, desiredWorldState):
     return random.choice(equallyValubleIndexes) # Return the index of the event with the lowest distance to the desiredWorldState
 
 
-def distanceBetweenWorldstates(currWorldState, newWorldState):
+def distanceBetweenWorldstates(desiredWorldState, newWorldState):
     distance = 0
-    if currWorldState.characters:
-        for character in currWorldState.characters:
+    if desiredWorldState.characters:
+        for character in desiredWorldState.characters:
             for future_character in newWorldState.characters:
                 if future_character.name == character.name:
                     distance += character.getDistanceToFutureState(future_character.getAttributes())
-    drama_distance = abs((currWorldState.drama_score * 5/2) ** 2 - (newWorldState.drama_score * 5/2)**2)**(1/2)
+    drama_distance = abs((desiredWorldState.drama_score * 5 / 2) ** 2 - (newWorldState.drama_score * 5 / 2) ** 2) ** (1 / 2)
     distance += drama_distance
     print("Distance between world states is {}".format(distance))
     return distance
