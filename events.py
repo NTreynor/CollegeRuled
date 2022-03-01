@@ -85,11 +85,11 @@ class FallInLove(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char = reachable_worldstate.characters[char_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
-        print(char.relationships[char_two])
-        print("and is now: ")
+        #print(str(char.name) + "'s relationship towards " + str(char_two.name) + " was: ")
+        #print(char.relationships[char_two])
+        #print("and is now: ")
         char.updateRelationship(char_two, 15)
-        print(char.relationships[char_two])
+        #print(char.relationships[char_two])
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
 
@@ -131,8 +131,8 @@ class GetJob(PlotFragment):
         prev_char = worldstate.characters[char_index]
         char.updateHealth(2)
         char.updateHappiness(4)
-        print(str(char.name) + "'s health was {} and is now {}.".format(prev_char.health, char.health))
-        print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
+        #print(str(char.name) + "'s health was {} and is now {}.".format(prev_char.health, char.health))
+        #print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
@@ -189,12 +189,12 @@ class HitBySpaceCar(PlotFragment):
             print("As {} lay there on the spaceway, they stared up at two moons rising over the dusky" \
                 " horizon. Then they closed their eyes for the last time.".format(char_two.name)) 
             char_two.murderer = True
-        else:
-            print("{}'s relationship towards {} was {} and is now {}.".format(char_one.name, char_two.name, \
-                prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
-            print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
-                prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
-            print("{}'s health is now {}.".format(char_two.name, char_two.health))
+        #else:
+            #print("{}'s relationship towards {} was {} and is now {}.".format(char_one.name, char_two.name, \
+            #    prev_char_one.relationships[prev_char_two], char_one.relationships[char_two]))
+            #print("{}'s relationship towards {} was {} and is now {}.".format(char_two.name, char_one.name, \
+            #    prev_char_two.relationships[prev_char_one], char_two.relationships[char_one]))
+            #print("{}'s health is now {}.".format(char_two.name, char_two.health))
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
