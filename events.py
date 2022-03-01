@@ -185,7 +185,7 @@ class HitBySpaceCar(PlotFragment):
         print("{} hits {} with their spacecar.".format(char_one.name, char_two.name))
         if char_two.isDead():  # kill character
             self.drama += 5  # more dramatic if character dies
-            reachable_worldstate.removeCharacter(char_two, worldstate)
+            reachable_worldstate.removeCharacter(char_two)
             print("As {} lay there on the spaceway, they stared up at two moons rising over the dusky" \
                 " horizon. Then they closed their eyes for the last time.".format(char_two.name)) 
             char_two.murderer = True
