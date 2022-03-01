@@ -27,6 +27,8 @@ class Character:
             self.stole, self.in_jail, self.fugitive, self.relationships, self.romantic_interest, self.location]
 
     def getAttributeDistance(self, attribute_idx, attribute_value):
+        if self.getAttributes()[attribute_idx] == None: # Don't do a comparison if one doesn't need to be made.
+            return 0
         if attribute_idx in [0, 1]:  # health or happiness
             dist = (self.getAttributes()[attribute_idx] - attribute_value) * 5 
             dist = abs(dist)

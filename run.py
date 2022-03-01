@@ -12,7 +12,7 @@ def getRunableEvents(current_worldstate, possible_events):
     return runableEvents
 
 
-def runStory(current_worldstate, possible_events, depth_limit, waypoints = None):
+def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
     if (depth_limit == 0):
         return
     
@@ -20,8 +20,13 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
     if len(runable_events) == 0:
         print("THE END")
         return
-    # Now we would want to select an event to run.
-    desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
+
+    # Setup to get story to pathfind to the first waypoint.
+    if waypoint != None:
+        desired_world_state = waypoint
+    else:
+        desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
+
     idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]

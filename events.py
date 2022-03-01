@@ -126,11 +126,7 @@ class GetJob(PlotFragment):
         print("After trying on dozens of business casual outfits and suffering through", \
             "awkward interviews, {} got a job.".format(characters[0].name))
         char_index = worldstate.characters.index(characters[0])
-        prev_char = worldstate.characters[char_index]
-        char = reachable_worldstate.characters[char_index]
-        char.updateHappiness(4)
-        char.has_job = True
-        # print(str(char.name) + "'s happiness was {} and is now {}.".format(prev_char.happiness, char.happiness))
+        prev_char = worldstate.charactersS
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
     
