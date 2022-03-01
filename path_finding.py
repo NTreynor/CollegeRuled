@@ -36,5 +36,5 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
     distance += drama_distance
     #print("Distance between world states is {}".format(distance))
-    return distance
-    #return 5 #outputting a fixed distance causes the system to default to random event selection.
+    #return distance
+    return 5 #outputting a fixed distance causes the system to default to random event selection.
