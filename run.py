@@ -58,7 +58,7 @@ if __name__ == "__main__":
     updateState = WorldState(1, [Character("Jess", health=2)], environments)
 
 
-    possibleEvents = [FallInLove(), VentThroughAirlock(), HitBySpaceCar(), GetJob(), GoToSpaceJail()]
+    possibleEvents = [FallInLove(), VentThroughAirlock(), HitBySpaceCar(), GetJob(), GoToSpaceJail(), SoloJailbreak()]
 
     runStory(initialState, possibleEvents, 20, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))

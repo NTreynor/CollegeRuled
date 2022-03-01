@@ -263,3 +263,42 @@ class GoToSpaceJail(PlotFragment):
             jail = Environment("Space Jail", -2, False, True) 
             worldstate.environments.append(jail)
         character.location = jail
+
+class SoloJailbreak(PlotFragment):
+    def init(self):
+        self.drama = 15
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            if character.in_jail:
+                valid_characters.append([character])
+                environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHappiness(3)
+        print("{} spent months chipping at a crack in the circuit panel.".format(characters[0].name), \
+              "They finally succeed at shutting down space jail long enough to make a break for it.", \
+              "{} returns to their home planet, Higgins.".format(characters[0].name))
+        char.in_jail = False
+        char.fugitive = True
+        reachable_worldstate.drama_score += self.drama
+        return reachable_worldstate
+
+    def getNewWorldState(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHappiness(3)
+        char.in_jail = False
+        char.fugitive = True
+        reachable_worldstate.drama_score += self.drama
+        return reachable_worldstate
