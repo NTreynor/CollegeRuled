@@ -4,7 +4,7 @@ from path_finding import *
 
 def getRunableEvents(current_worldstate, possible_events):
     runableEvents = []
-    for event in possibleEvents: # Check to see if an instance of an event is runnable
+    for event in possible_events: # Check to see if an instance of an event is runnable
         preconditions_met, characters, environments = event.checkPreconditions(current_worldstate)
         if preconditions_met: # If so, add all possible instances to the list of runnable events
             for x in range(len(characters)):
@@ -18,7 +18,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
     
     runable_events = getRunableEvents(current_worldstate, possible_events)
     if len(runable_events) == 0:
-        print("No more events are possible. Fin.")
+        print("THE END")
         return
     # Now we would want to select an event to run.
     desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
@@ -53,20 +53,9 @@ if __name__ == "__main__":
     updateState = WorldState(1, [Character("Jess", health=12)], environments)
 
 
-    loveEvent = FallInLove()
-    #preconditions_met, characters, environments = loveEvent.checkPreconditions(initialState)
-    #if preconditions_met:
-    #    next_worldstate = loveEvent.doEvent(initialState, characters[0], environments)
+    possibleEvents = [FallInLove(), VentThroughAirlock(), HitBySpaceCar(), GetJob(), GoToSpaceJail()]
 
-    airlockEvent = VentThroughAirlock()
-    #preconditions_met, characters = airlockEvent.checkPreconditions(initialState)
-    #if preconditions_met:
-    #    next_worldstate = airlockEvent.doEvent(initialState, characters[0], space)
-
-
-    possibleEvents = [loveEvent, airlockEvent, HitBySpaceCar(), GetJob()]
-
-    runStory(initialState, possibleEvents, 5)
+    runStory(initialState, possibleEvents, 20)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
 
