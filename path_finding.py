@@ -1,5 +1,5 @@
 from backbone_classes import *
-from events import *
+from misc_events import *
 import random
 
 def selectEventIndex(eventList, desiredWorldState):
