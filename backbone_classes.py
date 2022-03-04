@@ -117,6 +117,7 @@ class Character:
     def __str__(self):
         return "Character name is %s. Relationship matrix is: %s." % (self.name, str(self.relationships))
 
+
 class Environment:
     def __init__(self, name, quality, spacesuit_needed, has_airlock):
         self.name = name
@@ -148,3 +149,21 @@ class WorldState:
 
     def __str__(self):
         return ""
+
+
+class PlotFragment:
+    def __init__(self):
+        self.drama = 0  # out of 20
+        return
+
+    def checkPreconditions(self, worldstate):
+        """ return a boolean if the event can happen,
+        the characters involved, environments, and the updated drama score"""
+        return
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        return
+
+    def getNewWorldState(self, worldstate, characters, environment):
+        return self.doEvent(self, worldstate, characters, environment, print_event=True)
+
