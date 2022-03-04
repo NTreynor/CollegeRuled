@@ -18,7 +18,7 @@ class Character:
         if relationships == None:
             self.relationships = {}
         self.romantic_interest = romantic_interest  # will be the name of the romantic interest
-        self.location = location  # string
+        self.location = location  # Environment type
         # self.in_spacesuit = False
     
     def getAttributes(self):
@@ -165,5 +165,5 @@ class PlotFragment:
         return
 
     def getNewWorldState(self, worldstate, characters, environment):
-        return self.doEvent(self, worldstate, characters, environment, print_event=True)
+        return self.doEvent(worldstate, characters, environment, print_event=False)
 
