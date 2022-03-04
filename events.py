@@ -302,3 +302,49 @@ class SoloJailbreak(PlotFragment):
         char.fugitive = True
         reachable_worldstate.drama_score += self.drama
         return reachable_worldstate
+
+class CoffeeSpill(PlotFragment):
+    def __init__(self):
+        self.drama = 3
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            for character2 in character.relationships:
+                if character.sameLoc(character2):
+                    valid_characters.append([character, character2])
+                    environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        print("{} is walking along with a fresh cup of coffe, and loses their footing right as they would pass by {}, spilling their drink all over them! \"Oh goodness, sorry about that!\" says {}.".format(characters[0].name, characters[1].name, characters[0].name))
+        char_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char = reachable_worldstate.characters[char_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        prev_relationship = char.relationships[char_two]
+        char.updateRelationship(char_two, 5)
+        char_two.updateRelationship(char, -5)
+        # print(char.name + "'s relationship towards", char_two.name, "was", prev_relationship, \
+        #     "and is now", str(char.relationships[char_two])+ ".")
+        reachable_worldstate.drama_score += self.drama
+        return reachable_worldstate
+
+    def getNewWorldState(self, worldstate, characters, environment):
+
+        #print("Is this the source of error? - Love")
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char = reachable_worldstate.characters[char_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char.updateRelationship(char_two, 5)
+        char_two.updateRelationship(char, -5)
+        reachable_worldstate.drama_score += self.drama
+        return reachable_worldstate
