@@ -1,5 +1,8 @@
 from backbone_classes import *
 from events import *
+from law_events import *
+from love_events import *
+from health_events import *
 from path_finding import *
 
 def getRunableEvents(current_worldstate, possible_events):
