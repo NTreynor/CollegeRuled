@@ -31,3 +31,6 @@ class FallInLove(PlotFragment):
                 char_one.relationships[char_two] - 15, "and is now", str(char_one.relationships[char_two]) + ".")
         return reachable_worldstate
 
+
+class GoOnDate(PlotFragment):
+    pass
