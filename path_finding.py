@@ -18,6 +18,8 @@ def selectEventIndex(eventList, desiredWorldState):
         #print("x = " + str(x))
         reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
         currEventValue = distanceBetweenWorldstates(desiredWorldState, reachable_worldstate)
+        #print("distance: ")
+        #print(currEventValue)
         if (currEventValue < currEventMinDistance):
             equallyValubleIndexes = []
             currEventMinDistance = currEventValue
@@ -31,6 +33,8 @@ def selectEventIndex(eventList, desiredWorldState):
 def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_events):
     #runable_events = getRunableEvents(current_worldstate, possible_events)
     if depth == 1:
+        #print("leaf node distance: ")
+        #print (selectEventIndex(eventList, desiredWorldState)[1])
         return selectEventIndex(eventList, desiredWorldState)
 
     if depth >= 2:
@@ -47,7 +51,8 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
                 equallyValubleIndexes.append(x)
             if (currWorldStateValue[1] == currEventMinDistance):
                 equallyValubleIndexes.append(x)
-
+        #print("Distance of child selected: ")
+        #print(currEventMinDistance)
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
 
