@@ -9,6 +9,9 @@ from run import getRunableEvents
 
 
 def selectEventIndex(eventList, desiredWorldState):
+    if len(eventList) == 0:
+        #print("No events left in this tree!")
+        return 0, 9999
     #print("attempting to select event index")
     currMinDistanceEventIndex = -1
     currEventMinDistance = 9999
@@ -41,7 +44,7 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
         return selectEventIndex(eventList, desiredWorldState)
 
     if depth >= 2:
-        currEventMinDistance = 9999
+        currEventMinDistance = 99999
         equallyValubleIndexes = []
         for x in range (len(eventList)):
             reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
@@ -67,8 +70,8 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
             for future_character in newWorldState.characters:
                 if future_character.name == character.name:
                     distance += character.getDistanceToFutureState(future_character.getAttributes())
-    drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
-    distance -= drama_distance
+    #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
+    #distance -= drama_distance
     #print("Distance between world states is {}".format(distance))
     return distance
     #return 5 #outputting a fixed distance causes the system to default to random event selection.

@@ -65,9 +65,9 @@ if __name__ == "__main__":
 
     # Creating new characters for a more interesting waypoint.
 
-    new_jess = Character("Jess", health=7, happiness=7, location=serenity)
-    new_mal = Character("Mal", health=1, happiness=0, location=serenity)
-    new_inara = Character("Inara", health=10, happiness=8, location=serenity)
+    new_jess = Character("Jess", health=2, happiness=0, location=serenity)
+    new_mal = Character("Mal", health=2, happiness=0, location=serenity)
+    new_inara = Character("Inara", health=2, happiness=9, location=serenity)
     new_jess.updateRelationship(new_mal, 35)
     new_mal.updateRelationship(new_jess, -25)
     new_inara.updateRelationship(new_jess, 60)
