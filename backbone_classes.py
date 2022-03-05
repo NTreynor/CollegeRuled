@@ -1,10 +1,7 @@
-from backbone_classes import *
-
-
 class Character:
     def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
         murderer=None, stole=None, in_jail=None, fugitive=None, relationships = None, \
-            romantic_interest=None, location=None):
+            romantic_partner=None, location=None):
         self.name = name  # string
         self.health = health # scale of 0 to 10
         self.happiness = happiness # scale of 0 to 10
@@ -17,14 +14,14 @@ class Character:
         self.relationships = relationships # key: other character, val: [-100, 100]
         if relationships == None:
             self.relationships = {}
-        self.romantic_interest = romantic_interest  # will be the name of the romantic interest
+        self.romantic_partner = romantic_partner  # will be the name of the romantic interest
         self.location = location  # Environment type
         # self.in_spacesuit = False
     
     def getAttributes(self):
         """ for waypointing """
         return [self.health, self.happiness, self.has_job, self.exploited, self.murderer, \
-            self.stole, self.in_jail, self.fugitive, self.relationships, self.romantic_interest, self.location]
+            self.stole, self.in_jail, self.fugitive, self.relationships, self.romantic_partner, self.location]
 
     def getAttributeDistance(self, attribute_idx, attribute_value):
         if self.getAttributes()[attribute_idx] == None: # Don't do a comparison if one doesn't need to be made.
@@ -46,7 +43,7 @@ class Character:
                 char_dist = abs(dist)
                 dist += char_dist
         elif attribute_idx == 9:  # romantic interest
-            if self.romantic_interest == attribute_value:
+            if self.romantic_partner == attribute_value:
                 dist = 0
             else:
                 dist = 50
