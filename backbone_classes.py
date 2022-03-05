@@ -1,3 +1,5 @@
+import copy
+
 class Character:
     def __init__(self, name, health=None, happiness=None, has_job=None, exploited=None, \
         murderer=None, stole=None, in_jail=None, fugitive=None, relationships = None, \
@@ -109,7 +111,9 @@ class Character:
         return False
 
     def sameLoc(self, other_character):
-        return self.location == other_character.location
+        # TODO: if we want location implementation, change this
+        # return self.location == other_character.location
+        return True
 
     def __str__(self):
         return "Character name is %s. Relationship matrix is: %s." % (self.name, str(self.relationships))
@@ -137,6 +141,7 @@ class WorldState:
         self.characters = characters
         self.environments = environments
         self.drama_score = 0
+        self.event_history = []  # list of 3D tuples (event, characters involved, environments involved)
     
     def removeCharacter(self, character):
         for other_character in self.characters:
@@ -163,4 +168,14 @@ class PlotFragment:
 
     def getNewWorldState(self, worldstate, characters, environment):
         return self.doEvent(worldstate, characters, environment, print_event=False)
+    
+    def updateEventHistory(self, worldstate, characters, environment):
+        updated_state = copy.deepcopy(worldstate)
+        updated_state.event_history.append((self, characters, environment))
+        return updated_state
+    
+    def withinRepeatLimit(self, worldstate, characters, environment, repeat_limit):
+        return (worldstate.event_history.count((self, characters, environment)) < repeat_limit)
 
+    def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
+        return ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])

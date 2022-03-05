@@ -18,8 +18,9 @@ class HitBySpaceCar(PlotFragment):
         for character in worldstate.characters:
                 for character2 in worldstate.characters:
                     if character != character2:
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                        if self.withinRepeatLimit(worldstate, [character, character2], [], 1):
+                            valid_characters.append([character, character2])
+                            environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -44,4 +45,4 @@ class HitBySpaceCar(PlotFragment):
                     " horizon. Then they closed their eyes for the last time.".format(char_two.name)) 
             char_one.murderer = True
         reachable_worldstate.drama_score += self.drama
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)

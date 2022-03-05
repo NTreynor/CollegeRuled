@@ -49,13 +49,16 @@ if __name__ == "__main__":
     space.setDistance(serenity, 0)
 
     # Character & Relationship Initialization
-    jess = Character("Jess", health=10, happiness=0, location=serenity)
-    mal = Character("Mal", health=10, happiness=0, location=serenity)
-    jess.updateRelationship(mal, -15)
-    mal.updateRelationship(jess, 25)
+    jess = Character("Jess", health=7, happiness=7, location=serenity)
+    mal = Character("Mal", health=5, happiness=2, location=serenity)
+    inara = Character("Inara", health=10, happiness=8, location=serenity)
+    # jess.updateRelationship(mal, -15)
+    # mal.updateRelationship(jess, 25)
+    # inara.updateRelationship(jess, 10)
+    # inara.updateRelationship(mal, 5)
 
     environments = [serenity, space]
-    characters = [jess, mal]
+    characters = [jess, mal, inara]
 
     initialState = WorldState(0, characters, environments)
     updateState = WorldState(1, [Character("Jess", health=2)], environments)
@@ -64,6 +67,7 @@ if __name__ == "__main__":
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
     loveEvents = [FallInLove(), AskOnDate()]
     runStory(initialState, possibleEvents, 20, updateState)
+    print()
     #print(distanceBetweenWorldstates(initialState, updateState))
 
 

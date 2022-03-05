@@ -10,8 +10,9 @@ class GetJob(PlotFragment):
         environments = []
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
-                valid_characters.append([character])
-                environments.append([])
+                if self.withinRepeatLimit(worldstate, [character], [], 1):
+                    valid_characters.append([character])
+                    environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -27,7 +28,7 @@ class GetJob(PlotFragment):
         char.updateHappiness(4)
         char.has_job = True
         reachable_worldstate.drama_score += self.drama
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
 
@@ -41,8 +42,9 @@ class CoffeeSpill(PlotFragment):
         for character in worldstate.characters:
             for character2 in character.relationships:
                 if character.sameLoc(character2):
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                    if self.withinRepeatLimit(worldstate, [character, character2], [], 2):
+                        valid_characters.append([character, character2])
+                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -60,4 +62,4 @@ class CoffeeSpill(PlotFragment):
         char.updateRelationship(char_two, 5)
         char_two.updateRelationship(char, -5)
         reachable_worldstate.drama_score += self.drama
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
