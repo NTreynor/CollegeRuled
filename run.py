@@ -53,16 +53,29 @@ if __name__ == "__main__":
     jess = Character("Jess", health=7, happiness=7, location=serenity)
     mal = Character("Mal", health=5, happiness=2, location=serenity)
     inara = Character("Inara", health=10, happiness=8, location=serenity)
-    # jess.updateRelationship(mal, -15)
-    # mal.updateRelationship(jess, 25)
-    # inara.updateRelationship(jess, 10)
-    # inara.updateRelationship(mal, 5)
+    jess.updateRelationship(mal, -15)
+    mal.updateRelationship(jess, 25)
+    inara.updateRelationship(jess, 10)
+    inara.updateRelationship(mal, 5)
 
     environments = [serenity, space]
     characters = [jess, mal, inara]
 
     initialState = WorldState(0, characters, environments)
-    updateState = WorldState(1, [Character("Jess", health=2)], environments)
+
+    # Creating new characters for a more interesting waypoint.
+
+    new_jess = Character("Jess", health=7, happiness=7, location=serenity)
+    new_mal = Character("Mal", health=1, happiness=0, location=serenity)
+    new_inara = Character("Inara", health=10, happiness=8, location=serenity)
+    new_jess.updateRelationship(new_mal, 35)
+    new_mal.updateRelationship(new_jess, -25)
+    new_inara.updateRelationship(new_jess, 60)
+    new_inara.updateRelationship(new_mal, -50)
+    newChars = [new_mal, new_jess, new_inara]
+
+    #updateState = WorldState(1, [Character("Jess", health=2)], environments)
+    updateState = WorldState(1, newChars, environments)
 
 
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
