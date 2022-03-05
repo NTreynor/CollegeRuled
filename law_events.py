@@ -24,7 +24,7 @@ class VentThroughAirlock(PlotFragment):
         if print_event:
             print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
         reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = reachable_worldstate.environments[worldstate.environments.index(environment)] #Change this in the future, environment is a copy (bc deepcopy)
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
 class GoToSpaceJail(PlotFragment):
@@ -37,8 +37,11 @@ class GoToSpaceJail(PlotFragment):
         for character in worldstate.characters:
             if (character.stole or character.exploited or character.murderer or character.fugitive) \
                 and not character.in_jail:
-                valid_characters.append([character])
-                environments.append([])
+                characters = [character]
+                environment = []
+                if self.withinRepeatLimit(worldstate, characters, environment, 2) and self.withinRecentHistoryLimit(worldstate, characters, environment, 3):
+                    valid_characters.append([character])
+                    environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -55,7 +58,7 @@ class GoToSpaceJail(PlotFragment):
         self.sendCharacterToJail(char, reachable_worldstate)
         char.in_jail = True
         reachable_worldstate.drama_score += self.drama
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
         
     def sendCharacterToJail(self, character, worldstate):
         jail = False
@@ -96,4 +99,4 @@ class SoloJailbreak(PlotFragment):
         char.in_jail = False
         char.fugitive = True
         reachable_worldstate.drama_score += self.drama
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)

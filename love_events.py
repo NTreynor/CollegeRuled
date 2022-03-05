@@ -10,10 +10,14 @@ class FallInLove(PlotFragment):
         valid_characters = []
         environments = []
         for character in worldstate.characters:
-                for character2 in character.relationships:
-                    if (character.relationships[character2] > 0) & character.sameLoc(character2):
-                        valid_characters.append([character, character2])
-                        environments.append([])
+            for character2 in worldstate.characters:
+                if character != character2:
+                    character.updateRelationship(character2, 0) # if no relationship, add to relationship table
+                    if (character.relationships[character2] >= 0):
+                            if self.withinRepeatLimit(worldstate, [character, character2], [], 3):
+                                valid_characters.append([character, character2])
+                                environments.append([])
+                        
 
         if valid_characters:
             return True, valid_characters, environments
@@ -31,7 +35,7 @@ class FallInLove(PlotFragment):
         char_one = reachable_worldstate.characters[char_one_index]
         char_two = reachable_worldstate.characters[char_two_index]
         char_one.relationships[char_two] += 25
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
 class AskOnDate(PlotFragment):
@@ -44,8 +48,9 @@ class AskOnDate(PlotFragment):
         for character in worldstate.characters:
                 for character2 in character.relationships:
                     if (character.relationships[character2] > 50) & (character.romantic_partner == None):
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                        if self.withinRepeatLimit(worldstate, [character, character2], [], 3):
+                            valid_characters.append([character, character2])
+                            environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -71,7 +76,7 @@ class AskOnDate(PlotFragment):
             print("{} declines {}'s invitation.".format(char_two.name, char_one.name))
         char_one.relationships[char_two] -= 5
         char_two.relationships[char_one] += 10
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
     
     def goOnDate(self, worldstate, characters, environment, print_event):
         reachable_worldstate = copy.deepcopy(worldstate)
@@ -86,4 +91,4 @@ class AskOnDate(PlotFragment):
         char_two.relationships[char_one] += 30
         char_one.romantic_partner = char_two
         char_two.romantic_partner = char_one
-        return reachable_worldstate
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
