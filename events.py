@@ -63,3 +63,4 @@ class CoffeeSpill(PlotFragment):
         char_two.updateRelationship(char, -5)
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
