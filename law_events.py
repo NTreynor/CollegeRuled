@@ -23,7 +23,7 @@ class VentThroughAirlock(PlotFragment):
         reachable_worldstate.index += 1
         if print_event:
             print("{} pushes {} out of the airlock.".format(characters[0].name, characters[1].name))
-        reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = environment #Change this in the future, environment is a copy (bc deepcopy)
+        reachable_worldstate.characters[worldstate.characters.index(characters[1])].location = reachable_worldstate.environments[worldstate.environments.index(environment)] #Change this in the future, environment is a copy (bc deepcopy)
         return reachable_worldstate
 
 
