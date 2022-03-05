@@ -2,6 +2,9 @@ from backbone_classes import *
 from events import *
 import random
 
+from run import getRunableEvents
+
+
 def selectEventIndex(eventList, desiredWorldState):
     #print("attempting to select event index")
     currMinDistanceEventIndex = -1
@@ -23,7 +26,30 @@ def selectEventIndex(eventList, desiredWorldState):
         if (currEventValue == currEventMinDistance):
             equallyValubleIndexes.append(x)
 
-    return random.choice(equallyValubleIndexes) # Return the index of the event with the lowest distance to the desiredWorldState
+    return random.choice(equallyValubleIndexes), currEventMinDistance # Return the index of the event with the lowest distance to the desiredWorldState
+
+def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_events):
+    #runable_events = getRunableEvents(current_worldstate, possible_events)
+    if depth == 1:
+        return selectEventIndex(eventList, desiredWorldState)
+
+    if depth >= 2:
+        currEventMinDistance = 9999
+        equallyValubleIndexes = []
+        for x in range (len(eventList)):
+            reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
+            runable_events = getRunableEvents(reachable_worldstate, possible_events)
+            currWorldStateValue = getBestIndexLookingAhead(depth-1, runable_events, desiredWorldState, possible_events)
+            if (currWorldStateValue[1] < currEventMinDistance):
+                equallyValubleIndexes = []
+                currEventMinDistance = currWorldStateValue[1]
+                currMinDistanceEventIndex = x
+                equallyValubleIndexes.append(x)
+            if (currWorldStateValue[1] == currEventMinDistance):
+                equallyValubleIndexes.append(x)
+
+        return random.choice(equallyValubleIndexes), currEventMinDistance
+
 
 
 def distanceBetweenWorldstates(currWorldState, newWorldState):
@@ -36,5 +62,5 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
     distance += drama_distance
     #print("Distance between world states is {}".format(distance))
-    #return distance
-    return 5 #outputting a fixed distance causes the system to default to random event selection.
+    return distance
+    #return 5 #outputting a fixed distance causes the system to default to random event selection.
