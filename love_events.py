@@ -99,7 +99,7 @@ class AskOnDate(PlotFragment):
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
-class Cheat(AskOnDate):
+class Cheat(PlotFragment):
     def __init__(self):
         self.drama = 17
     
@@ -110,9 +110,10 @@ class Cheat(AskOnDate):
             return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
-                    if character.romantic_partner not in [None, character2]:
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                    if character.romantic_partner != None:
+                        if character.romantic_partner != character2:
+                            valid_characters.append([character, character2])
+                            environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -125,7 +126,8 @@ class Cheat(AskOnDate):
         new_state = AskOnDate().doEvent(worldstate, characters, environment, print_event)
         cheater = new_state.characters[cheater_idx]
         prev_partner = new_state.characters[prev_partner_idx]
-        print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
+        if print_event:
+            print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
         prev_partner.romantic_partner = None
         prev_partner.relationships[cheater] -= 30
         prev_partner.updateHappiness(-5)
