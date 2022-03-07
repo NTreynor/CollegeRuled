@@ -66,3 +66,13 @@ class HospitalVisit(PlotFragment):
             return True, valid_characters, environments
         else:
             return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHealth(5)
+        if print_event:
+            print("{} goes to the hospital to recover their health.".format(char.name))
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)

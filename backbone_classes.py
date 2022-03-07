@@ -182,6 +182,7 @@ class PlotFragment:
         for event in worldstate.event_history:
             if event[0] == self:
                 count += 1
+        # print(self, count)   # TODO: why isn't count updating?
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):

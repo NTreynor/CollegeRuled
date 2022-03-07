@@ -79,10 +79,10 @@ if __name__ == "__main__":
 
 
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
-                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
-    loveEvents = [FallInLove(), AskOnDate()]
-    runStory(initialState, possibleEvents, 20, updateState)
-    print()
+                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
+                        HospitalVisit(), Cheat()]
+    loveEvents = [FallInLove(), AskOnDate(), Cheat()]
+    runStory(initialState, loveEvents, 10, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
 
