@@ -78,7 +78,8 @@ if __name__ == "__main__":
     updateState = WorldState(1, newChars, environments)
 
 
-    possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
+    possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
+                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
     loveEvents = [FallInLove(), AskOnDate()]
     runStory(initialState, possibleEvents, 20, updateState)
     print()

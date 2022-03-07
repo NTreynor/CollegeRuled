@@ -34,12 +34,14 @@ class GoToSpaceJail(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate, 2):
+            return False, None, environments
         for character in worldstate.characters:
             if (character.stole or character.exploited or character.murderer or character.fugitive) \
                 and not character.in_jail:
                 characters = [character]
                 environment = []
-                if self.withinRepeatLimit(worldstate, characters, environment, 2) and self.withinRecentHistoryLimit(worldstate, characters, environment, 3):
+                if self.withinRecentHistoryLimit(worldstate, characters, environment, 3):
                     valid_characters.append([character])
                     environments.append([])
         if valid_characters:

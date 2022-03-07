@@ -15,12 +15,13 @@ class HitBySpaceCar(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate, 2):
+            return False, None, environments
         for character in worldstate.characters:
                 for character2 in worldstate.characters:
                     if character != character2:
-                        if self.withinRepeatLimit(worldstate, [character, character2], [], 1):
-                            valid_characters.append([character, character2])
-                            environments.append([])
+                        valid_characters.append([character, character2])
+                        environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -46,3 +47,22 @@ class HitBySpaceCar(PlotFragment):
             char_one.murderer = True
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class HospitalVisit(PlotFragment):
+    def __init__(self):
+        self.drama = 6
+    
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            if character.health < 3:
+                valid_characters.append([character])
+                environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments

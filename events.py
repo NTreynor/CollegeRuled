@@ -1,18 +1,19 @@
 from backbone_classes import *
 import copy
 
-class GetJob(PlotFragment):
+class GetMiningJob(PlotFragment):
     def __init__(self):
         self.drama = 4
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate, 5):
+            return False, None, environments
         for character in worldstate.characters:
             if not (character.has_job or character.fugitive):
-                if self.withinRepeatLimit(worldstate, [character], [], 1):
-                    valid_characters.append([character])
-                    environments.append([])
+                valid_characters.append([character])
+                environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
@@ -22,10 +23,41 @@ class GetJob(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event:
             print("After visiting the open market every day and getting increasingly desperate", \
-                "{} got a job.".format(characters[0].name))
+                "{} got a mining job.".format(characters[0].name))
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
-        char.updateHappiness(4)
+        char.updateHappiness(3)
+        char.has_job = True
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+
+class GetSpaceShuttleJob(PlotFragment):
+    def __init__(self):
+        self.drama = 4
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            if not character.has_job:
+                valid_characters.append([character])
+                environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        if print_event:
+            print("{} got a job flying transport shuttles for interplanet exports.".format(characters[0].name))
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHappiness(5)
         char.has_job = True
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
@@ -37,14 +69,15 @@ class CoffeeSpill(PlotFragment):
         self.drama = 3
 
     def checkPreconditions(self, worldstate):
+        if not self.withinRepeatLimit(worldstate, 2):
+            return False, None, environments
         valid_characters = []
         environments = []
         for character in worldstate.characters:
             for character2 in character.relationships:
                 if character.sameLoc(character2):
-                    if self.withinRepeatLimit(worldstate, [character, character2], [], 2):
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                    valid_characters.append([character, character2])
+                    environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments

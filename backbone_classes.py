@@ -174,8 +174,15 @@ class PlotFragment:
         updated_state.event_history.append((self, characters, environment))
         return updated_state
     
-    def withinRepeatLimit(self, worldstate, characters, environment, repeat_limit):
+    def withinInstanceLimit(self, worldstate, characters, environment, repeat_limit):
         return (worldstate.event_history.count((self, characters, environment)) < repeat_limit)
+    
+    def withinRepeatLimit(self, worldstate, repeat_limit):
+        count = 0
+        for event in worldstate.event_history:
+            if event[0] == self:
+                count += 1
+        return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
         return ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])

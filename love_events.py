@@ -9,14 +9,15 @@ class FallInLove(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate, 6):
+            return False, None, environments
         for character in worldstate.characters:
             for character2 in worldstate.characters:
                 if character != character2:
                     character.updateRelationship(character2, 0) # if no relationship, add to relationship table
                     if (character.relationships[character2] >= 0):
-                            if self.withinRepeatLimit(worldstate, [character, character2], [], 3):
-                                valid_characters.append([character, character2])
-                                environments.append([])
+                            valid_characters.append([character, character2])
+                            environments.append([])
                         
 
         if valid_characters:
@@ -45,12 +46,13 @@ class AskOnDate(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate, 5):
+            return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
                     if (character.relationships[character2] > 50) & (character.romantic_partner == None):
-                        if self.withinRepeatLimit(worldstate, [character, character2], [], 3):
-                            valid_characters.append([character, character2])
-                            environments.append([])
+                        valid_characters.append([character, character2])
+                        environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
