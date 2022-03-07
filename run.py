@@ -31,7 +31,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
     #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
-    idx_of_event_to_run = getBestIndexLookingAhead(3, runable_events, desired_world_state, possible_events)[0] #First parameter indicates search depth. Do not exceed 6.
+    idx_of_event_to_run = getBestIndexLookingAhead(1, runable_events, desired_world_state, possible_events)[0] #First parameter indicates search depth. Do not exceed 6.
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
     chars_to_use = runable_events[idx_of_event_to_run][2]
@@ -60,10 +60,10 @@ if __name__ == "__main__":
 
     happy_jess = Character("Jess", happiness=10, location=serenity)
     happy_mal = Character("Mal", happiness=10, location=serenity)
-    heartbroken_inara = Character("Inara", happiness=0, location=serenity)
+    heartbroken_inara = Character("Inara", location=serenity)
 
     happy_jess.updateRelationship(happy_mal, 90)
-    happy_mal.updateRelationship(happy_jess, 90)
+    happy_mal.updateRelationship(happy_jess, 70)
 
     loveChars = [happy_mal, happy_jess, heartbroken_inara]
 
@@ -112,5 +112,8 @@ if __name__ == "__main__":
 
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, loveState))
+
+    for character in finalState.characters:
+        print (character.relationships)
 
 
