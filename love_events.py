@@ -16,6 +16,7 @@ class FallInLove(PlotFragment):
                 if character != character2:
                     character.updateRelationship(character2, 0) # if no relationship, add to relationship table
                     if (character.relationships[character2] >= 0):
+                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
                             valid_characters.append([character, character2])
                             environments.append([])
                         
