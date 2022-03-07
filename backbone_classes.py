@@ -196,4 +196,4 @@ class PlotFragment:
         checks that a specific instance of this event hasn't occurred within
         num_recent_events in the worldstate's history
         """
-        return ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])
+        return not ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])
