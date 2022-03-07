@@ -9,7 +9,7 @@ from run import getRunableEvents
 
 
 def selectEventIndex(eventList, desiredWorldState):
-    if len(eventList) == 0:
+    if len(eventList) == 0: # TODO: Handle this before calling it, rather than after.
         #print("No events left in this tree!")
         return 0, 9999
     #print("attempting to select event index")
@@ -73,5 +73,5 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
     #distance -= drama_distance
     #print("Distance between world states is {}".format(distance))
-    return distance
-    #return 5 #outputting a fixed distance causes the system to default to random event selection.
+    #return distance
+    return 5 #outputting a fixed distance causes the system to default to random event selection.

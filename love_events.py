@@ -16,6 +16,7 @@ class FallInLove(PlotFragment):
                 if character != character2:
                     character.updateRelationship(character2, 0) # if no relationship, add to relationship table
                     if (character.relationships[character2] >= 0):
+                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
                             valid_characters.append([character, character2])
                             environments.append([])
                         
@@ -36,6 +37,7 @@ class FallInLove(PlotFragment):
         char_one = reachable_worldstate.characters[char_one_index]
         char_two = reachable_worldstate.characters[char_two_index]
         char_one.relationships[char_two] += 25
+        reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
@@ -78,6 +80,7 @@ class AskOnDate(PlotFragment):
             print("{} declines {}'s invitation.".format(char_two.name, char_one.name))
         char_one.relationships[char_two] -= 5
         char_two.relationships[char_one] += 10
+        reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
     
     def goOnDate(self, worldstate, characters, environment, print_event):
@@ -93,4 +96,43 @@ class AskOnDate(PlotFragment):
         char_two.relationships[char_one] += 30
         char_one.romantic_partner = char_two
         char_two.romantic_partner = char_one
+        reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class Cheat(PlotFragment):
+    def __init__(self):
+        self.drama = 17
+    
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+                for character2 in character.relationships:
+                    if character.romantic_partner != None:
+                        if character.romantic_partner != character2:
+                            valid_characters.append([character, character2])
+                            environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        prev_partner_idx = worldstate.characters.index(characters[0].romantic_partner)
+        cheater_idx = worldstate.characters.index(characters[0])
+        new_state = AskOnDate().doEvent(worldstate, characters, environment, print_event)
+        cheater = new_state.characters[cheater_idx]
+        prev_partner = new_state.characters[prev_partner_idx]
+        if print_event:
+            print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
+        prev_partner.romantic_partner = None
+        prev_partner.relationships[cheater] -= 30
+        prev_partner.updateHappiness(-5)
+        new_state.drama_score += self.drama
+        return self.updateEventHistory(new_state, characters, environment)
+
+        

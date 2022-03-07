@@ -175,14 +175,25 @@ class PlotFragment:
         return updated_state
     
     def withinInstanceLimit(self, worldstate, characters, environment, repeat_limit):
+        """
+        checks that a specific instance of this event has not occurred repeat_limit times
+        """
         return (worldstate.event_history.count((self, characters, environment)) < repeat_limit)
     
     def withinRepeatLimit(self, worldstate, repeat_limit):
+        """
+        checks that any instance of this event has not occurred repeat_limit times
+        """
         count = 0
         for event in worldstate.event_history:
             if event[0] == self:
                 count += 1
+        # print(self, count)   # TODO: why isn't count updating?
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
+        """
+        checks that a specific instance of this event hasn't occurred within
+        num_recent_events in the worldstate's history
+        """
         return ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])

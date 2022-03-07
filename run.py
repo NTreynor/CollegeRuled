@@ -53,10 +53,16 @@ if __name__ == "__main__":
     jess = Character("Jess", health=7, happiness=7, location=serenity)
     mal = Character("Mal", health=5, happiness=2, location=serenity)
     inara = Character("Inara", health=10, happiness=8, location=serenity)
-    jess.updateRelationship(mal, -15)
-    mal.updateRelationship(jess, 25)
-    inara.updateRelationship(jess, 10)
-    inara.updateRelationship(mal, 5)
+    #jess.updateRelationship(mal, -15)
+    #mal.updateRelationship(jess, 25)
+    #inara.updateRelationship(jess, 10)
+    #inara.updateRelationship(mal, 5)
+
+    jess.updateRelationship(mal, 45)
+    mal.updateRelationship(jess, 45)
+    inara.updateRelationship(jess, 55)
+    inara.updateRelationship(mal, 55)
+
 
     environments = [serenity, space]
     characters = [jess, mal, inara]
@@ -79,10 +85,11 @@ if __name__ == "__main__":
 
 
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
-                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill()]
-    loveEvents = [FallInLove(), AskOnDate()]
-    runStory(initialState, possibleEvents, 20, updateState)
-    print()
+                        GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
+                        HospitalVisit(), Cheat()]
+    loveEvents = [FallInLove(), AskOnDate(), Cheat()]
+    #loveEvents = [FallInLove(), Cheat()]
+    runStory(initialState, loveEvents, 5, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
 
