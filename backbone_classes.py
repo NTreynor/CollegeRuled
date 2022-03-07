@@ -37,15 +37,25 @@ class Character:
                 dist = 0
         elif attribute_idx == 8:  #  relationships
             dist = 0
+            #print("Calculating relationship difference")
             for character in attribute_value:
-                if character in self.relationships:
-                    char_dist = (self.relationships[character] - attribute_value[character]) * 1/4
-                else:
+                #print("Char found")
+                #print(character)
+                charFound = False
+                for character2 in self.relationships:
+                    if character.name == character2.name:
+                        char_dist = (self.relationships[character2] - attribute_value[character]) * 1/4
+                        dist += abs(char_dist)
+                        #print("Updated char relationship distance")
+                        #print(abs(char_dist))
+                        charFound = True
+                if charFound == False: # No match found. Incremend attribute.
                     char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
-                char_dist = abs(dist)
-                dist += char_dist
+                    dist += abs(char_dist)
+                    #print("No relationship found. Increment distance by ")
+                    #print(abs(char_dist))
         elif attribute_idx == 9:  # romantic interest
-            if self.romantic_partner == attribute_value:
+            if self.romantic_partner == attribute_value: #TODO: Check to see if this works properly and doesn't need adjustment like above
                 dist = 0
             else:
                 dist = 50
@@ -59,7 +69,13 @@ class Character:
         distance = 0
         for idx, attribute in enumerate(future_state_attributes):
             if attribute:
-                distance += self.getAttributeDistance(idx, attribute)
+                distanceInc = self.getAttributeDistance(idx, attribute)
+                #print("idx")
+                #print(idx)
+                #print("distance:")
+                #print(distanceInc)
+                #print(distance)
+                distance += distanceInc
         return distance
 
     def updateRelationship(self, other_character, relationship_change):
@@ -187,7 +203,7 @@ class PlotFragment:
         """
         checks that a specific instance of this event has not occurred repeat_limit times
         """
-        
+
         charStr = ""
         for char in characters:
             charStr += char.name
