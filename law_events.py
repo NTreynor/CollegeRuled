@@ -35,7 +35,7 @@ class Steal(PlotFragment):
         valid_characters = []
         environments = []
         for character in worldstate.characters:
-            if character.location.has_airlock:
+            if character.happiness < 6:
                 for character2 in character.relationships:
                     character.updateRelationship(character2, 0)
                     if character.relationships[character2] <= 0:
@@ -59,6 +59,7 @@ class Steal(PlotFragment):
         thief.stole = True
         thief.updateHappiness(4)
         victim.updateHappiness(-4)
+        reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 

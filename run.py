@@ -92,9 +92,9 @@ if __name__ == "__main__":
 
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
                         GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
-                        HospitalVisit(), Cheat()]
+                        HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob()]
 
-    loveEvents = [FallInLove(), AskOnDate(), Cheat()]
+    loveEvents = [FallInLove(), AskOnDate(), Cheat(), Irritate(), Befriend()]
     #loveEvents = [FallInLove(), Cheat()]
     simpleTest = [FallInLove()]
 
@@ -103,10 +103,10 @@ if __name__ == "__main__":
     #print(distanceBetweenWorldstates(initialState, updateState))
 
     "TALE OF WOE AND MISERY:"
-    #runStory(initialState, possibleEvents, 10, updateState)
+    runStory(initialState, possibleEvents, 10, updateState)
 
     "TALE OF LOVE AND DRAMA:"
-    finalState = runStory(initialState, loveEvents, 5, loveState)
+    # finalState = runStory(initialState, loveEvents, 5, loveState)
 
     print("Starting Distance: ")
     print(distanceBetweenWorldstates(initialState, loveState))
