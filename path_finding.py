@@ -74,8 +74,8 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
                     distanceBetweenVersions = character.getDistanceToFutureState(future_character.getAttributes())
                     #print(distanceBetweenVersions)
                     distance += distanceBetweenVersions
-    #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
-    #distance -= drama_distance
+    drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
+    distance -= drama_distance
     #print("Distance between world states is {}".format(distance))
     #print(distance)
     return distance
