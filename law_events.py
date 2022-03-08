@@ -27,6 +27,41 @@ class VentThroughAirlock(PlotFragment):
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
+class Steal(PlotFragment):
+    def __init__(self):
+        self.drama = 7
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            if character.location.has_airlock:
+                for character2 in character.relationships:
+                    character.updateRelationship(character2, 0)
+                    if character.relationships[character2] <= 0:
+                        valid_characters.append([character, character2])
+                        environments.append([])
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        thief_idx = worldstate.characters.index(characters[0])
+        victim_index = worldstate.characters.index(characters[1])
+        thief = reachable_worldstate.characters[thief_idx]
+        victim = reachable_worldstate.characters[victim_index]
+        if print_event:
+            print("{} notices {} forgot to lock up when they left their bunker.".format(thief.name, victim.name),
+            "{} breaks in and steals all their valuables.".format(thief.name))
+        thief.stole = True
+        thief.updateHappiness(4)
+        victim.updateHappiness(-4)
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
 class GoToSpaceJail(PlotFragment):
     def __init__(self):
         self.drama = 10
@@ -53,7 +88,6 @@ class GoToSpaceJail(PlotFragment):
         reachable_worldstate = copy.deepcopy(worldstate)
         char_index = worldstate.characters.index(characters[0])
         char = reachable_worldstate.characters[char_index]
-        prev_char = worldstate.characters[char_index]
         char.updateHappiness(-5)
         if print_event:
             print("The law finally caught up with {}. They are in space jail.".format(characters[0].name))
