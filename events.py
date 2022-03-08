@@ -63,6 +63,36 @@ class GetSpaceShuttleJob(PlotFragment):
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
 
+class LoseJob(PlotFragment):
+    def __init__(self):
+        self.drama = 11
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 3):
+            return False, None, environments
+        for character in worldstate.characters:
+            if character.has_job:
+                valid_characters.append([character])
+                environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+    
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        if print_event:
+            print("The empire decreases exports from Higgins and the economy takes a hit. {} loses their job".format(characters[0].name))
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char.updateHappiness(-5)
+        char.has_job = False
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
 
 class CoffeeSpill(PlotFragment):
     def __init__(self):

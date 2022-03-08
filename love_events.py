@@ -39,7 +39,86 @@ class FallInLove(PlotFragment):
         char_two_index = worldstate.characters.index(characters[1])
         char_one = reachable_worldstate.characters[char_one_index]
         char_two = reachable_worldstate.characters[char_two_index]
-        char_one.relationships[char_two] += 25
+        char_one.updateRelationship(char_two, 25)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class Befriend(PlotFragment):
+    def __init__(self):
+        self.drama = 3
+
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 6):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    character.updateRelationship(character2, 0) # if no relationship, add to relationship table
+                    if (character.relationships[character2] >= 0):
+                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                            if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
+                                valid_characters.append([character, character2])
+                                environments.append([])
+                        
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+            
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        if print_event:
+            print("{} and {} go for drinks at the Leaky Engine and make each other laugh a lot".format(characters[0].name, characters[1].name), \
+                '"We should do this again," {} says.'.format(characters[1].name))
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char_one.updateRelationship(char_two, 10)
+        char_two.updateRelationship(char_one, 10)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class Irritate(PlotFragment):
+    def __init__(self):
+        self.drama = 3
+
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        if not self.withinRepeatLimit(worldstate, 6):
+            return False, None, environments
+        for character in worldstate.characters:
+            for character2 in worldstate.characters:
+                if character != character2:
+                    valid_characters.append([character, character2])
+                    environments.append([])
+                        
+
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        reachable_worldstate.index += 1
+        if print_event:
+            print("{} makes a rude 'your mom' joke. {} doesn't laugh".format(characters[0].name, characters[1].name))
+        char_one_index = worldstate.characters.index(characters[0])
+        char_two_index = worldstate.characters.index(characters[1])
+        char_one = reachable_worldstate.characters[char_one_index]
+        char_two = reachable_worldstate.characters[char_two_index]
+        char_two.updateRelationship(char_one, -5)
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
