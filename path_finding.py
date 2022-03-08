@@ -78,5 +78,5 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
     #distance -= drama_distance
     #print("Distance between world states is {}".format(distance))
     #print(distance)
-    #return distance
-    return 5 #outputting a fixed distance causes the system to default to random event selection.
+    return distance
+    #return 5 #outputting a fixed distance causes the system to default to random event selection.
