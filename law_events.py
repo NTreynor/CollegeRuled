@@ -34,6 +34,8 @@ class Steal(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
+        if not self.withinRepeatLimit(worldstate):
+            return False, None, environments
         for character in worldstate.characters:
             if character.happiness < 6:
                 for character2 in character.relationships:
@@ -179,7 +181,7 @@ class AssistedJailBreak(PlotFragment):
 
 class SabotagedJailBreak(PlotFragment):
     def init(self):
-        self.drama = 15
+        self.drama = 9
 
     def checkPreconditions(self, worldstate):
         valid_characters = []
@@ -188,8 +190,9 @@ class SabotagedJailBreak(PlotFragment):
             if character.in_jail:
                 for character2 in worldstate.characters:
                     if character2.relationships[character] < 10:
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 5):
+                            valid_characters.append([character, character2])
+                            environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
