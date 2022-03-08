@@ -195,8 +195,9 @@ class Cheat(PlotFragment):
                 for character2 in character.relationships:
                     if character.romantic_partner != None:
                         if character.romantic_partner != character2:
-                            valid_characters.append([character, character2])
-                            environments.append([])
+                            if character2 in worldstate.characters: #Make sure character is not dead lmao
+                                valid_characters.append([character, character2])
+                                environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments

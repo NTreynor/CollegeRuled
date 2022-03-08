@@ -12,6 +12,8 @@ def getRunableEvents(current_worldstate, possible_events):
         if preconditions_met: # If so, add all possible instances to the list of runnable events
             for x in range(len(characters)):
                 runableEvents.append([event, current_worldstate, characters[x], environments[x]])
+    print("Runnable events found: ")
+    print(len(runableEvents))
     return runableEvents
 
 
@@ -31,7 +33,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
     #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
-    depthToSearch = min(depth_limit, 3)
+    depthToSearch = min(depth_limit, 1)
     idx_of_event_to_run = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events)[0] #First parameter indicates search depth. Do not exceed 6.
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
@@ -106,14 +108,16 @@ if __name__ == "__main__":
     "TALE OF WOE AND MISERY:"
     runStory(initialState, possibleEvents, 10, updateState)
 
+"""
     "TALE OF LOVE AND DRAMA:"
-    # finalState = runStory(initialState, loveEvents, 5, loveState)
+    finalState = runStory(initialState, loveEvents, 5, loveState)
 
     print("Starting Distance: ")
     print(distanceBetweenWorldstates(initialState, loveState))
 
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, loveState))
+"""
 
    #for character in finalState.characters:
     #    print(character)
