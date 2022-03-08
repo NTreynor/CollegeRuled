@@ -70,7 +70,7 @@ class CoffeeSpill(PlotFragment):
 
     def checkPreconditions(self, worldstate):
         if not self.withinRepeatLimit(worldstate, 2):
-            return False, None, environments
+            return False, None, []
         valid_characters = []
         environments = []
         for character in worldstate.characters:

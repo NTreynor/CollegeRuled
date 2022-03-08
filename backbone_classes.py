@@ -37,15 +37,25 @@ class Character:
                 dist = 0
         elif attribute_idx == 8:  #  relationships
             dist = 0
+            #print("Calculating relationship difference")
             for character in attribute_value:
-                if character in self.relationships:
-                    char_dist = (self.relationships[character] - attribute_value[character]) * 1/4
-                else:
+                #print("Char found")
+                #print(character)
+                charFound = False
+                for character2 in self.relationships:
+                    if character.name == character2.name:
+                        char_dist = (self.relationships[character2] - attribute_value[character]) * 1/4
+                        dist += abs(char_dist)
+                        #print("Updated char relationship distance")
+                        #print(abs(char_dist))
+                        charFound = True
+                if charFound == False: # No match found. Incremend attribute.
                     char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
-                char_dist = abs(dist)
-                dist += char_dist
+                    dist += abs(char_dist)
+                    #print("No relationship found. Increment distance by ")
+                    #print(abs(char_dist))
         elif attribute_idx == 9:  # romantic interest
-            if self.romantic_partner == attribute_value:
+            if self.romantic_partner == attribute_value: #TODO: Check to see if this works properly and doesn't need adjustment like above
                 dist = 0
             else:
                 dist = 50
@@ -59,7 +69,13 @@ class Character:
         distance = 0
         for idx, attribute in enumerate(future_state_attributes):
             if attribute:
-                distance += self.getAttributeDistance(idx, attribute)
+                distanceInc = self.getAttributeDistance(idx, attribute)
+                #print("idx")
+                #print(idx)
+                #print("distance:")
+                #print(distanceInc)
+                #print(distance)
+                distance += distanceInc
         return distance
 
     def updateRelationship(self, other_character, relationship_change):
@@ -171,14 +187,33 @@ class PlotFragment:
     
     def updateEventHistory(self, worldstate, characters, environment):
         updated_state = copy.deepcopy(worldstate)
-        updated_state.event_history.append((self, characters, environment))
+
+        charStr = ""
+        for char in characters:
+            charStr += char.name
+
+        envStr = ""
+        for env in environment:
+            charStr += char.name
+
+        updated_state.event_history.append((type(self), charStr, envStr))
         return updated_state
     
     def withinInstanceLimit(self, worldstate, characters, environment, repeat_limit):
         """
         checks that a specific instance of this event has not occurred repeat_limit times
         """
-        return (worldstate.event_history.count((self, characters, environment)) < repeat_limit)
+
+        charStr = ""
+        for char in characters:
+            charStr += char.name
+        envStr = ""
+        for env in environment:
+            charStr += char.name
+
+        numOccurances = (worldstate.event_history.count((type(self), charStr, envStr)))
+        #print(numOccurances)
+        return (numOccurances < repeat_limit)
     
     def withinRepeatLimit(self, worldstate, repeat_limit):
         """
@@ -186,9 +221,9 @@ class PlotFragment:
         """
         count = 0
         for event in worldstate.event_history:
-            if event[0] == self:
+            if event[0] == type(self):
                 count += 1
-        # print(self, count)   # TODO: why isn't count updating?
+        #print(type(self), count)   # Count updating apropriately.
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
@@ -196,4 +231,15 @@ class PlotFragment:
         checks that a specific instance of this event hasn't occurred within
         num_recent_events in the worldstate's history
         """
-        return ((self, characters, environment) in worldstate.event_history[-1 * num_recent_events:])
+
+        charStr = ""
+        for char in characters:
+            charStr += char.name
+        envStr = ""
+        for env in environment:
+            charStr += char.name
+
+        bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
+        #if not bool:
+        #    print("Event found! Cannot repeat") # appears to work!
+        return bool
