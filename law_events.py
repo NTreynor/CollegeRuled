@@ -137,3 +137,41 @@ class SoloJailbreak(PlotFragment):
         char.fugitive = True
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
+
+
+class AssistedJailBreak(PlotFragment):
+    def init(self):
+        self.drama = 15
+
+    def checkPreconditions(self, worldstate):
+        valid_characters = []
+        environments = []
+        for character in worldstate.characters:
+            if character.in_jail:
+                for character2 in worldstate.characters:
+                    if character2.relationships[character] > 50:
+                        valid_characters.append([character, character2])
+                        environments.append([])
+        if valid_characters:
+            return True, valid_characters, environments
+        else:
+            return False, None, environments
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        char_index = worldstate.characters.index(characters[0])
+        char = reachable_worldstate.characters[char_index]
+        char2_index = worldstate.characters.index(characters[1])
+        char2 = reachable_worldstate.characters[char2_index]
+        if print_event:
+            line1 = "{} visits {} in Space Jail.".format(char2.name, char.name)
+            line2 = "When the guards aren't looking, {} smuggles {} a screwdriver".format(char2.name, char.name)
+            line3 = "{} uses the screwdriver to get into a high security docking port, where {} picks them up.".format(char.name, char2.name)
+            line4 = "They make a break for it!"
+            print(line1, line2, line3, line4)
+        char.in_jail = False
+        char.fugitive = True
+        char2.fugitive = True
+        char.updateRelationship(char2, 50)
+        reachable_worldstate.drama_score += self.drama
+        return self.updateEventHistory(reachable_worldstate, characters, environment)

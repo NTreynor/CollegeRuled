@@ -92,7 +92,8 @@ if __name__ == "__main__":
 
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
                         GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
-                        HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob()]
+                        HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
+                        AssistedJailBreak()]
 
     loveEvents = [FallInLove(), AskOnDate(), Cheat(), Irritate(), Befriend()]
     #loveEvents = [FallInLove(), Cheat()]
