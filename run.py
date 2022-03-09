@@ -17,7 +17,7 @@ def getRunableEvents(current_worldstate, possible_events):
     return runableEvents
 
 
-def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
+def runStory(current_worldstate, possible_events, depth_limit, waypoints = None):
     if (depth_limit == 0):
         return current_worldstate
     
@@ -27,9 +27,9 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
         return current_worldstate
 
     # Setup to get story to pathfind to the first waypoint.
-    if waypoint != None:
+    if (waypoints != None) & (len(waypoints) != 0):
         #print("Waypoint found")
-        desired_world_state = waypoint[0]
+        desired_world_state = waypoints[0]
     else:
         print("No waypoint")
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
@@ -53,9 +53,10 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
     if desired_world_state.radius == None:
         desired_world_state.radius = 0
     if (distanceBetweenWorldstates(next_worldstate, desired_world_state) < desired_world_state.radius):
-        waypoint.pop(0)
+        print("Waypoint reached. Moving to next waypoint.")
+        waypoints.pop(0)
 
-    return runStory(next_worldstate, possible_events, depth_limit-1, waypoint)
+    return runStory(next_worldstate, possible_events, depth_limit - 1, waypoints)
 
 def waypointTestEnvironment():
     # Environment Initialization
@@ -88,7 +89,7 @@ def waypointTestEnvironment():
     wp_jess.romantic_partner = wp_mal
     wp_mal.romantic_partner = wp_jess
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
 
 
@@ -98,7 +99,7 @@ def waypointTestEnvironment():
     wp_mal.romantic_partner = wp_inara
 
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
 
     waypoints = [wp_2_worldstate, wp_3_worldstate]
