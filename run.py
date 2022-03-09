@@ -114,9 +114,9 @@ if __name__ == "__main__":
     #runStory(initialState, simpleTest, 5, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
-    """
+
     #"TALE OF WOE AND MISERY:"
-    finalState = runStory(initialState, possibleEvents, 15, updateState)
+    finalState = runStory(initialState, possibleEvents, 25, updateState)
 
     print("Starting Distance: ")
     print(distanceBetweenWorldstates(initialState, updateState))
@@ -125,7 +125,6 @@ if __name__ == "__main__":
     print(distanceBetweenWorldstates(finalState, updateState))
 
     """
-
     finalState = runStory(initialState, simpleTest, 10, loveState)
 
     print("Starting Distance: ")
@@ -133,7 +132,7 @@ if __name__ == "__main__":
 
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, loveState))
-
+    """
    #for character in finalState.characters:
     #    print(character)
     #    print (character.relationships)
