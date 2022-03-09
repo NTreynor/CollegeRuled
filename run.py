@@ -52,6 +52,54 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
 
     return runStory(next_worldstate, possible_events, depth_limit-1, waypoint)
 
+def waypointTestEnvironment():
+    # Environment Initialization
+    wp_serenity = Environment("Serenity", 25, False, True)
+    wp_space = Environment("Space", -100, True, False)
+    wp_serenity.setDistance(wp_space, 0)
+    wp_space.setDistance(wp_serenity, 0)
+
+    # Character & Relationship Initialization
+    wp_jess = Character("Jess", health=8, happiness=8, location=wp_serenity)
+    wp_mal = Character("Mal", health=8, happiness=7, location=wp_serenity)
+    wp_inara = Character("Inara", health=8, happiness=5, location=wp_serenity)
+
+    wp_jess.updateRelationship(wp_mal, 45)
+    wp_jess.updateRelationship(wp_inara, 0)
+    wp_mal.updateRelationship(wp_jess, 45)
+    wp_mal.updateRelationship(wp_inara, 35)
+    wp_inara.updateRelationship(wp_jess, -5)
+    wp_inara.updateRelationship(wp_mal, 35)
+
+    wp_environments = [wp_serenity, wp_space]
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate)
+
+    # Update characters for second waypoint
+    wp_jess.updateRelationship(wp_mal, 30)
+    wp_mal.updateRelationship(wp_jess, 40)
+    wp_jess.romantic_partner = wp_mal
+    wp_mal.romantic_partner = wp_jess
+
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+    wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
+
+
+    wp_jess.updateRelationship(wp_mal, -30)
+    wp_mal.updateRelationship(wp_jess, -30)
+    wp_inara.updateRelationship(wp_mal, 30)
+    wp_mal.romantic_partner = wp_inara
+
+
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
+    wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
+
+    waypoints = [wp_2_worldstate, wp_3_worldstate]
+    starting_point = wp_init_worldstate
+
+    return [starting_point, waypoints]
 
 if __name__ == "__main__":
     # Environment Initialization
@@ -114,7 +162,7 @@ if __name__ == "__main__":
     #runStory(initialState, simpleTest, 5, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
-
+    """
     #"TALE OF WOE AND MISERY:"
     finalState = runStory(initialState, possibleEvents, 25, updateState)
 
@@ -124,7 +172,7 @@ if __name__ == "__main__":
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, updateState))
 
-    """
+    
     finalState = runStory(initialState, simpleTest, 10, loveState)
 
     print("Starting Distance: ")
@@ -136,5 +184,10 @@ if __name__ == "__main__":
    #for character in finalState.characters:
     #    print(character)
     #    print (character.relationships)
+
+    initWorldState, waypoints = waypointTestEnvironment()
+
+
+
 
 
