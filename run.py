@@ -29,7 +29,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
     # Setup to get story to pathfind to the first waypoint.
     if waypoint != None:
         #print("Waypoint found")
-        desired_world_state = waypoint
+        desired_world_state = waypoint[0]
     else:
         print("No waypoint")
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
@@ -49,6 +49,11 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
     next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
 
     #print(distanceBetweenWorldstates(next_worldstate, waypoint))
+
+    if desired_world_state.radius == None:
+        desired_world_state.radius = 0
+    if (distanceBetweenWorldstates(next_worldstate, desired_world_state) < desired_world_state.radius):
+        waypoint.pop(0)
 
     return runStory(next_worldstate, possible_events, depth_limit-1, waypoint)
 
@@ -186,6 +191,7 @@ if __name__ == "__main__":
     #    print (character.relationships)
 
     initWorldState, waypoints = waypointTestEnvironment()
+    runStory(initWorldState, possibleEvents, 15, waypoints)
 
 
 

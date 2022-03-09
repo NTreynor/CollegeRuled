@@ -152,12 +152,13 @@ class Environment:
 
 # World state should consist of a list of characters and environments.
 class WorldState:
-    def __init__(self, index, characters, environments):
+    def __init__(self, index, characters, environments, radius = None):
         self.index = index
         self.characters = characters
         self.environments = environments
         self.drama_score = 0
         self.event_history = []  # list of 3D tuples (event, characters involved, environments involved)
+        self.radius = radius
     
     def removeCharacter(self, character):
         for other_character in self.characters:
