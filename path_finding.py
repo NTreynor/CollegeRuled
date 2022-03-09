@@ -85,7 +85,7 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
                     #print(distanceBetweenVersions)
                     distance += distanceBetweenVersions
 
-        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 50 # Change this value to change weight of undesired deaths.
+        deadCharacterPenalty = abs(len(currWorldState.characters)-len(newWorldState.characters)) * 40 # Change this value to change weight of undesired deaths.
         distance += deadCharacterPenalty
     #drama_distance = abs(currWorldState.drama_score - newWorldState.drama_score) * 5/2
     #distance -= drama_distance
