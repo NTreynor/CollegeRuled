@@ -23,7 +23,7 @@ def selectEventIndex(eventList, desiredWorldState):
         #print(x)
         #print("x = " + str(x))
         reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
-        currEventValue = distanceBetweenWorldstates(desiredWorldState, reachable_worldstate)
+        currEventValue = distanceBetweenWorldstates(reachable_worldstate, desiredWorldState)
         #print("distance: ")
         #print(currEventValue)
         if (currEventValue < currEventMinDistance):
@@ -34,6 +34,11 @@ def selectEventIndex(eventList, desiredWorldState):
         if (currEventValue == currEventMinDistance):
             equallyValubleIndexes.append(x)
 
+
+    #print("Distance of child selected: ")
+    #print(currEventMinDistance)
+    #print("Num equally valuble options: ")
+    #print(len(equallyValubleIndexes))
     return random.choice(equallyValubleIndexes), currEventMinDistance # Return the index of the event with the lowest distance to the desiredWorldState
 
 def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_events):
@@ -44,11 +49,11 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
         return selectEventIndex(eventList, desiredWorldState)
 
     if depth >= 2:
-        print("Initial Call to getBestIndex, depth >= 2")
+        #print("Initial Call to getBestIndex, depth >= 2")
         currEventMinDistance = 99999
         equallyValubleIndexes = []
-        print("Number of events that can be run: ")
-        print(len(eventList))
+        #print("Number of events that can be run: ")
+        #print(len(eventList))
         for x in range (len(eventList)):
             reachable_worldstate = eventList[x][0].getNewWorldState(eventList[x][1], eventList[x][2], eventList[x][3])
             runable_events = getRunableEvents(reachable_worldstate, possible_events)
@@ -60,10 +65,10 @@ def getBestIndexLookingAhead(depth, eventList, desiredWorldState, possible_event
                 equallyValubleIndexes.append(x)
             if (currWorldStateValue[1] == currEventMinDistance):
                 equallyValubleIndexes.append(x)
-        print("Distance of child selected: ")
-        print(currEventMinDistance)
-        print("Num equally valuble options: ")
-        print(len(equallyValubleIndexes))
+        #print("Distance of child selected: ")
+        #print(currEventMinDistance)
+        #print("Num equally valuble options: ")
+        #print(len(equallyValubleIndexes))
         return random.choice(equallyValubleIndexes), currEventMinDistance
 
 

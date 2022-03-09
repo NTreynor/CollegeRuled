@@ -35,13 +35,20 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
     #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
-    depthToSearch = min(depth_limit, 1)
-    idx_of_event_to_run = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events)[0] #First parameter indicates search depth. Do not exceed 6.
+    depthToSearch = min(depth_limit, 2)
+    indexValuePair = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events) #First parameter indicates search depth. Do not exceed 6.
+    idx_of_event_to_run = indexValuePair[0]
+    #print("Event selected. Supposed distance: ")
+    #print(indexValuePair[1])
+    #print("Actual Distance: ")
+
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
     chars_to_use = runable_events[idx_of_event_to_run][2]
     environments_to_use = runable_events[idx_of_event_to_run][3]
     next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
+
+    #print(distanceBetweenWorldstates(next_worldstate, waypoint))
 
     return runStory(next_worldstate, possible_events, depth_limit-1, waypoint)
 
@@ -107,7 +114,8 @@ if __name__ == "__main__":
     #runStory(initialState, simpleTest, 5, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
-    "TALE OF WOE AND MISERY:"
+    """
+    #"TALE OF WOE AND MISERY:"
     finalState = runStory(initialState, possibleEvents, 15, updateState)
 
     print("Starting Distance: ")
@@ -116,8 +124,8 @@ if __name__ == "__main__":
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, updateState))
 
-"""
-    "TALE OF LOVE AND DRAMA:"
+    """
+
     finalState = runStory(initialState, simpleTest, 10, loveState)
 
     print("Starting Distance: ")
@@ -125,7 +133,6 @@ if __name__ == "__main__":
 
     print("Final Distance: ")
     print(distanceBetweenWorldstates(finalState, loveState))
-"""
 
    #for character in finalState.characters:
     #    print(character)
