@@ -28,12 +28,14 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
 
     # Setup to get story to pathfind to the first waypoint.
     if waypoint != None:
+        print("Waypoint found")
         desired_world_state = waypoint
     else:
+        print("No waypoint")
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
     #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
-    depthToSearch = min(depth_limit, 2)
+    depthToSearch = min(depth_limit, 1)
     idx_of_event_to_run = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events)[0] #First parameter indicates search depth. Do not exceed 6.
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
@@ -41,7 +43,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
     environments_to_use = runable_events[idx_of_event_to_run][3]
     next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
 
-    return runStory(next_worldstate, possible_events, depth_limit-1)
+    return runStory(next_worldstate, possible_events, depth_limit-1, waypoint)
 
 
 if __name__ == "__main__":
@@ -99,18 +101,24 @@ if __name__ == "__main__":
 
     loveEvents = [FallInLove(), AskOnDate(), Cheat(), Irritate(), Befriend()]
     #loveEvents = [FallInLove(), Cheat()]
-    simpleTest = [FallInLove()]
+    simpleTest = [FallInLove(), AskOnDate(), DoNothing()]
 
     #runStory(initialState, loveEvents, 5, updateState)
     #runStory(initialState, simpleTest, 5, updateState)
     #print(distanceBetweenWorldstates(initialState, updateState))
 
     "TALE OF WOE AND MISERY:"
-    runStory(initialState, possibleEvents, 10, updateState)
+    finalState = runStory(initialState, possibleEvents, 15, updateState)
+
+    print("Starting Distance: ")
+    print(distanceBetweenWorldstates(initialState, updateState))
+
+    print("Final Distance: ")
+    print(distanceBetweenWorldstates(finalState, updateState))
 
 """
     "TALE OF LOVE AND DRAMA:"
-    finalState = runStory(initialState, loveEvents, 5, loveState)
+    finalState = runStory(initialState, simpleTest, 10, loveState)
 
     print("Starting Distance: ")
     print(distanceBetweenWorldstates(initialState, loveState))

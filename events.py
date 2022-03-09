@@ -127,3 +127,15 @@ class CoffeeSpill(PlotFragment):
         reachable_worldstate.drama_score += self.drama
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 
+
+class DoNothing(PlotFragment):
+    def __init__(self):
+        self.drama = 0
+
+    def checkPreconditions(self, worldstate):
+        return True, [], []
+
+    def doEvent(self, worldstate, characters, environment, print_event=True):
+        reachable_worldstate = copy.deepcopy(worldstate)
+        return self.updateEventHistory(reachable_worldstate, characters, environment)
+
