@@ -28,7 +28,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoint = None):
 
     # Setup to get story to pathfind to the first waypoint.
     if waypoint != None:
-        print("Waypoint found")
+        #print("Waypoint found")
         desired_world_state = waypoint
     else:
         print("No waypoint")
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     # Character & Relationship Initialization
     jess = Character("Jess", health=7, happiness=10, location=serenity)
-    mal = Character("Mal", health=5, happiness=10, location=serenity)
+    mal = Character("Mal", health=7, happiness=10, location=serenity)
     inara = Character("Inara", health=10, happiness=0, location=serenity)
 
     jess.updateRelationship(mal, 45)
