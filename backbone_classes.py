@@ -163,6 +163,8 @@ class WorldState:
         for other_character in self.characters:
                 if character in other_character.relationships:
                     del other_character.relationships[character]
+                if other_character.romantic_partner == character:
+                    other_character.romantic_partner = None
         self.characters.remove(character)
 
     def __str__(self):
