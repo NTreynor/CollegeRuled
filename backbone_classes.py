@@ -26,8 +26,10 @@ class Character:
             self.stole, self.in_jail, self.fugitive, self.relationships, self.romantic_partner, self.location]
 
     def getAttributeDistance(self, attribute_idx, attribute_value):
-        if self.getAttributes()[attribute_idx] == None: # Don't do a comparison if one doesn't need to be made.
+        if attribute_value == None: # Don't do a comparison if one doesn't need to be made.
             return 0
+        #if self.getAttributes()[attribute_idx] == None: # Don't do a comparison if one doesn't need to be made.
+        #    return 0
         if attribute_idx in [0, 1]:  # health or happiness
             dist = (self.getAttributes()[attribute_idx] - attribute_value) * 5 
             dist = abs(dist)
@@ -55,10 +57,23 @@ class Character:
                     #print("No relationship found. Increment distance by ")
                     #print(abs(char_dist))
         elif attribute_idx == 9:  # romantic interest
-            if self.romantic_partner == attribute_value: #TODO: Check to see if this works properly and doesn't need adjustment like above
-                dist = 0
-            else:
-                dist = 50
+            #print("romantic partner being tested")
+            if self.romantic_partner != False and self.romantic_partner != None: # If there is a current romantic partner..
+                if attribute_value == False: # But no desired future partner, set distance to 50
+                    dist = 50
+                elif self.romantic_partner.name == attribute_value.name: # The correct partner, distance = 0!
+                    dist = 0
+                    #print("Romantic partner match")
+                else: # Means there is a romantic partner mismatch. Distance = 50
+                    dist = 50
+            elif self.romantic_partner == False: ## Current desired partner is false
+                if attribute_value == False: # and we want no partner? Good. Distance = 0
+                    dist = 0
+                else: # We want a partner that we do not have.
+                    dist = 50
+            elif self.romantic_partner == None:
+                print("Romantic partner set to None. Bug present.")
+                return
         elif attribute_idx == 10:  # location
             dist = 0
         return dist
@@ -165,7 +180,7 @@ class WorldState:
                 if character in other_character.relationships:
                     del other_character.relationships[character]
                 if other_character.romantic_partner == character:
-                    other_character.romantic_partner = None
+                    other_character.romantic_partner = False
         self.characters.remove(character)
 
     def __str__(self):

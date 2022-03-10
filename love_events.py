@@ -134,7 +134,7 @@ class AskOnDate(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
-                    if (character.relationships[character2] > 50) & (character.romantic_partner == None):
+                    if (character.relationships[character2] > 50) & (character.romantic_partner == None or character.romantic_partner == False):
                         valid_characters.append([character, character2])
                         environments.append([])
 
@@ -146,7 +146,7 @@ class AskOnDate(PlotFragment):
     def doEvent(self, worldstate, characters, environment, print_event=True):
         if print_event:
             print("{} asks {} to go on a picnic with them at the Rocket Wreck Hills. Their heart is racing.".format(characters[0].name, characters[1].name))
-        if characters[1]. relationships[characters[0]] < 50 or characters[1].romantic_partner != None:
+        if characters[1]. relationships[characters[0]] < 50 or (characters[1].romantic_partner != None and characters[1].romantic_partner != False):
             return self.getRejected(worldstate, characters, environment, print_event)
         else:
             return self.goOnDate(worldstate, characters, environment, print_event)
@@ -193,8 +193,9 @@ class Cheat(PlotFragment):
             return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
-                    if character.romantic_partner != None:
+                    if character.romantic_partner != None and character.romantic_partner != False:
                         if character.romantic_partner != character2:
+                            #print("Cheat fragment possible")
                             #if character2 in worldstate.characters: #Make sure character is not dead lmao
                             valid_characters.append([character, character2])
                             environments.append([])
@@ -212,7 +213,7 @@ class Cheat(PlotFragment):
         prev_partner = new_state.characters[prev_partner_idx]
         if print_event:
             print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
-        prev_partner.romantic_partner = None
+        prev_partner.romantic_partner = False
         prev_partner.relationships[cheater] -= 30
         prev_partner.updateHappiness(-5)
         new_state.drama_score += self.drama
