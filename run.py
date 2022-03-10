@@ -53,9 +53,14 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
     if desired_world_state.radius == None:
         desired_world_state.radius = 0
     if (distanceBetweenWorldstates(next_worldstate, desired_world_state) < desired_world_state.radius):
+        print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
+        print("<")
+        print(desired_world_state.radius)
         print("Waypoint reached. Moving to next waypoint.")
         waypoints.pop(0)
 
+
+    print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
     return runStory(next_worldstate, possible_events, depth_limit - 1, waypoints)
 
 def waypointTestEnvironment():
@@ -66,9 +71,9 @@ def waypointTestEnvironment():
     wp_space.setDistance(wp_serenity, 0)
 
     # Character & Relationship Initialization
-    wp_jess = Character("Jess", health=8, happiness=8, location=wp_serenity)
-    wp_mal = Character("Mal", health=8, happiness=7, location=wp_serenity)
-    wp_inara = Character("Inara", health=8, happiness=5, location=wp_serenity)
+    wp_jess = Character("Jess", health=8, happiness=8, location=wp_serenity, romantic_partner=False)
+    wp_mal = Character("Mal", health=8, happiness=7, location=wp_serenity, romantic_partner=False)
+    wp_inara = Character("Inara", health=8, happiness=5, location=wp_serenity, romantic_partner=False)
 
     wp_jess.updateRelationship(wp_mal, 45)
     wp_jess.updateRelationship(wp_inara, 0)
@@ -88,6 +93,7 @@ def waypointTestEnvironment():
     wp_mal.updateRelationship(wp_jess, 40)
     wp_jess.romantic_partner = wp_mal
     wp_mal.romantic_partner = wp_jess
+    wp_chars = [wp_jess, wp_mal, wp_inara]
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
@@ -97,6 +103,7 @@ def waypointTestEnvironment():
     wp_mal.updateRelationship(wp_jess, -30)
     wp_inara.updateRelationship(wp_mal, 30)
     wp_mal.romantic_partner = wp_inara
+    wp_chars = [wp_jess, wp_mal, wp_inara]
 
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
