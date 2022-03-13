@@ -97,6 +97,7 @@ def waypointTestEnvironment():
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
+    wp_2_worldstate.drama_score = 15
 
 
     wp_jess.updateRelationship(wp_mal, -30)
@@ -108,6 +109,7 @@ def waypointTestEnvironment():
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
+    wp_3_worldstate.drama_score = None
 
     waypoints = [wp_2_worldstate, wp_3_worldstate]
     starting_point = wp_init_worldstate
@@ -165,7 +167,7 @@ if __name__ == "__main__":
     possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
                         GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
                         HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
-                        AssistedJailBreak(), SabotagedJailBreak()]
+                        AssistedJailBreak(), SabotagedJailBreak(), DoNothing()]
 
     loveEvents = [FallInLove(), AskOnDate(), Cheat(), Irritate(), Befriend()]
     #loveEvents = [FallInLove(), Cheat()]

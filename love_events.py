@@ -100,8 +100,10 @@ class Irritate(PlotFragment):
         for character in worldstate.characters:
             for character2 in worldstate.characters:
                 if character != character2:
-                    valid_characters.append([character, character2])
-                    environments.append([])
+                    if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
+                        valid_characters.append([character, character2])
+                        environments.append([])
+
                         
 
         if valid_characters:
