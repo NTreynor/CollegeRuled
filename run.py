@@ -53,14 +53,14 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
     if desired_world_state.radius == None:
         desired_world_state.radius = 0
     if (distanceBetweenWorldstates(next_worldstate, desired_world_state) < desired_world_state.radius):
-        print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
-        print("<")
-        print(desired_world_state.radius)
-        print("Waypoint reached. Moving to next waypoint.")
+        #print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
+        print(". . .")
+        #print(desired_world_state.radius)
+        #print("Waypoint reached. Moving to next waypoint.")
         waypoints.pop(0)
 
 
-    print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
+    #print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
     return runStory(next_worldstate, possible_events, depth_limit - 1, waypoints)
 
 def waypointTestEnvironment():
@@ -86,30 +86,38 @@ def waypointTestEnvironment():
     wp_chars = [wp_jess, wp_mal, wp_inara]
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
 
-    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate)
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
 
     # Update characters for second waypoint
+    wp_jess.health = None
+    wp_mal.health = None
+    wp_inara.health = None
+    wp_jess.happiness = None
+    wp_mal.happiness = None
+    wp_inara.happiness = None
     wp_jess.updateRelationship(wp_mal, 30)
     wp_mal.updateRelationship(wp_jess, 40)
     wp_jess.romantic_partner = wp_mal
     wp_mal.romantic_partner = wp_jess
     wp_chars = [wp_jess, wp_mal, wp_inara]
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 10)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
     wp_2_worldstate.drama_score = 15
 
 
     wp_jess.updateRelationship(wp_mal, -30)
     wp_mal.updateRelationship(wp_jess, -30)
-    wp_inara.updateRelationship(wp_mal, 30)
+    wp_mal.updateRelationship(wp_inara, 30)
+    wp_inara.updateRelationship(wp_mal, 45)
     wp_mal.romantic_partner = wp_inara
-    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_chars = [wp_mal, wp_inara]
 
 
     wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
-    wp_3_worldstate.drama_score = None
+    wp_inara.murderer = True
+    wp_3_worldstate.drama_score = 1000
 
     waypoints = [wp_2_worldstate, wp_3_worldstate]
     starting_point = wp_init_worldstate

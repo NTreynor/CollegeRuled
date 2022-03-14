@@ -133,7 +133,9 @@ class DoNothing(PlotFragment):
         self.drama = 0
 
     def checkPreconditions(self, worldstate):
-        return True, [[]], [[]]
+        if self.withinRecentHistoryLimit(worldstate, [], [], 3):
+            return True, [[]], [[]]
+        return False, [[]], [[]]
 
     def doEvent(self, worldstate, characters, environment, print_event=True):
         reachable_worldstate = copy.deepcopy(worldstate)
