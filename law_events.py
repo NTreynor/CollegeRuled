@@ -191,9 +191,10 @@ class SabotagedJailBreak(PlotFragment):
             if character.in_jail:
                 for character2 in worldstate.characters:
                     if character2.relationships[character] < 10:
-                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 5):
-                            valid_characters.append([character, character2])
-                            environments.append([])
+                        if character != character2:
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 5):
+                                valid_characters.append([character, character2])
+                                environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:
