@@ -76,8 +76,7 @@ class GoToSpaceJail(PlotFragment):
         if not self.withinRepeatLimit(worldstate, 2):
             return False, None, environments
         for character in worldstate.characters:
-            if (character.stole or character.exploited or character.murderer or character.fugitive) \
-                and not character.in_jail:
+            if (character.stole or character.exploited or character.murderer or character.fugitive) and not character.in_jail:
                 characters = [character]
                 environment = []
                 if self.withinRecentHistoryLimit(worldstate, characters, environment, 3):

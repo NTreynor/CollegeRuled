@@ -241,7 +241,8 @@ class PlotFragment:
         for event in worldstate.event_history:
             if event[0] == type(self):
                 count += 1
-        #print(type(self), count)   # Count updating apropriately.
+        #if count >= 1:
+        #    print(type(self), count)   # Count updating apropriately.
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
