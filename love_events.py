@@ -198,8 +198,6 @@ class Cheat(PlotFragment):
                 for character2 in character.relationships:
                     if character.romantic_partner != None and character.romantic_partner != False:
                         if character.romantic_partner != character2:
-                            #print("Cheat fragment possible")
-                            #if character2 in worldstate.characters: #Make sure character is not dead lmao
                             valid_characters.append([character, character2])
                             environments.append([])
 
@@ -217,8 +215,6 @@ class Cheat(PlotFragment):
         if print_event:
             print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
         if cheater.romantic_partner == prev_partner:
-            #if print_event:
-                #print("Cheater no longer has partner")
             cheater.romantic_partner = False
         prev_partner.romantic_partner = False
         prev_partner.relationships[cheater] -= 30
