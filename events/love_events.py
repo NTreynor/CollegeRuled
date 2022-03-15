@@ -16,10 +16,8 @@ class FallInLove(PlotFragment):
                 if character != character2:
                     character.updateRelationship(character2, 0) # if no relationship, add to relationship table
                     if (character.relationships[character2] >= 0):
-                        #print("Checking if love event can be run")
                         if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 3):
                             if self.withinInstanceLimit(worldstate, [character, character2], [], 2):
-                                #print("Love not within recent history")
                                 valid_characters.append([character, character2])
                                 environments.append([])
                         

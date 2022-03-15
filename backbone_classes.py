@@ -37,7 +37,6 @@ class Character:
                 dist = 0
         elif attribute_idx == 8:  #  relationships
             dist = 0
-            #print("Calculating relationship difference")
             for character in attribute_value:
                 charFound = False
                 for character2 in self.relationships:
@@ -49,17 +48,15 @@ class Character:
                     char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
                     dist += abs(char_dist)
         elif attribute_idx == 9:  # romantic interest
-            #print("romantic partner being tested")
             if self.romantic_partner != False and self.romantic_partner != None: # If there is a current romantic partner..
                 if attribute_value == False: # But no desired future partner, set distance to 50
                     dist = 50
                 elif self.romantic_partner.name == attribute_value.name: # The correct partner, distance = 0!
                     dist = 0
-                    #print("Romantic partner match")
                 else: # Means there is a romantic partner mismatch. Distance = 50
                     dist = 50
-            elif self.romantic_partner == False: ## Current desired partner is false
-                if attribute_value == False: # and we want no partner? Good. Distance = 0
+            elif self.romantic_partner == False: 
+                if attribute_value == False:
                     dist = 0
                 else: # We want a partner that we do not have.
                     dist = 50
@@ -217,7 +214,6 @@ class PlotFragment:
             charStr += char.name
 
         numOccurances = (worldstate.event_history.count((type(self), charStr, envStr)))
-        #print(numOccurances)
         return (numOccurances < repeat_limit)
     
     def withinRepeatLimit(self, worldstate, repeat_limit):
@@ -228,8 +224,6 @@ class PlotFragment:
         for event in worldstate.event_history:
             if event[0] == type(self):
                 count += 1
-        #if count >= 1:
-        #    print(type(self), count)   # Count updating apropriately.
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
@@ -246,6 +240,4 @@ class PlotFragment:
             charStr += char.name
 
         bool = not ((type(self), charStr, envStr) in worldstate.event_history[-1 * num_recent_events:])
-        #if not bool:
-        #    print("Event found! Cannot repeat") # appears to work!
         return bool

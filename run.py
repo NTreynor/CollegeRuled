@@ -1,8 +1,8 @@
 from backbone_classes import *
-from events import *
-from law_events import *
-from love_events import *
-from health_events import *
+from events.events import *
+from events.law_events import *
+from events.love_events import *
+from events.health_events import *
 from path_finding import *
 
 def getRunableEvents(current_worldstate, possible_events):
@@ -12,8 +12,6 @@ def getRunableEvents(current_worldstate, possible_events):
         if preconditions_met: # If so, add all possible instances to the list of runnable events
             for x in range(len(characters)):
                 runableEvents.append([event, current_worldstate, characters[x], environments[x]])
-    #print("Runnable events found: ")
-    #print(len(runableEvents))
     return runableEvents
 
 
@@ -28,19 +26,14 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None,
 
     # Setup to get story to pathfind to the first waypoint.
     if (waypoints != None) & (len(waypoints) != 0):
-        #print("Waypoint found")
         desired_world_state = waypoints[0]
     else:
         print("No waypoint")
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
-    #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
     depthToSearch = min(depth_limit, lookaheadDepth)
     indexValuePair = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events) #First parameter indicates search depth. Do not exceed 6.
     idx_of_event_to_run = indexValuePair[0]
-    #print("Event selected. Supposed distance: ")
-    #print(indexValuePair[1])
-    #print("Actual Distance: ")
 
     event = runable_events[idx_of_event_to_run][0]
     worldstate_to_run = runable_events[idx_of_event_to_run][1]
@@ -48,15 +41,11 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None,
     environments_to_use = runable_events[idx_of_event_to_run][3]
     next_worldstate = event.doEvent(worldstate_to_run, chars_to_use, environments_to_use)
 
-    #print(distanceBetweenWorldstates(next_worldstate, waypoint))
 
     if desired_world_state.radius == None:
         desired_world_state.radius = 0
     if (distanceBetweenWorldstates(next_worldstate, desired_world_state) < desired_world_state.radius):
-        #print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
         print(". . .")
-        #print(desired_world_state.radius)
-        #print("Waypoint reached. Moving to next waypoint.")
         waypoints.pop(0)
 
     if depth_limit == 1:

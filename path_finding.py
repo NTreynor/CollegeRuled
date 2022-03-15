@@ -1,8 +1,8 @@
 from backbone_classes import *
-from events import *
-from law_events import *
-from love_events import *
-from health_events import *
+from events.events import *
+from events.law_events import *
+from events.love_events import *
+from events.health_events import *
 import random
 
 from run import getRunableEvents
@@ -13,7 +13,6 @@ def selectEventIndex(eventList, desiredWorldState):
         print("No events left in this tree!")
         return 0, 9999
 
-    currMinDistanceEventIndex = -1
     currEventMinDistance = 9999
     equallyValubleIndexes = []
     for x in range (len(eventList)):
@@ -23,7 +22,6 @@ def selectEventIndex(eventList, desiredWorldState):
         if (currEventValue < currEventMinDistance):
             equallyValubleIndexes = []
             currEventMinDistance = currEventValue
-            currMinDistanceEventIndex = x
         if (currEventValue == currEventMinDistance):
             equallyValubleIndexes.append(x)
 
@@ -64,7 +62,6 @@ def distanceBetweenWorldstates(currWorldState, newWorldState):
         for character in currWorldState.characters:
             for future_character in newWorldState.characters:
                 if future_character.name == character.name:
-                    #print("character match")
                     distanceBetweenVersions = character.getDistanceToFutureState(future_character.getAttributes())
                     distance += distanceBetweenVersions
 
