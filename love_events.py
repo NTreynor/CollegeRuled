@@ -132,13 +132,14 @@ class AskOnDate(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
-        if not self.withinRepeatLimit(worldstate, 5):
+        if not self.withinRepeatLimit(worldstate, 4):
             return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
                     if (character.relationships[character2] > 50) & (character.romantic_partner == None or character.romantic_partner == False):
-                        valid_characters.append([character, character2])
-                        environments.append([])
+                        if self.withinInstanceLimit(worldstate, [character, character2], [], 1):
+                            valid_characters.append([character, character2])
+                            environments.append([])
 
         if valid_characters:
             return True, valid_characters, environments
@@ -191,14 +192,12 @@ class Cheat(PlotFragment):
     def checkPreconditions(self, worldstate):
         valid_characters = []
         environments = []
-        if not self.withinRepeatLimit(worldstate, 3):
+        if not self.withinRepeatLimit(worldstate, 2):
             return False, None, environments
         for character in worldstate.characters:
                 for character2 in character.relationships:
                     if character.romantic_partner != None and character.romantic_partner != False:
                         if character.romantic_partner != character2:
-                            #print("Cheat fragment possible")
-                            #if character2 in worldstate.characters: #Make sure character is not dead lmao
                             valid_characters.append([character, character2])
                             environments.append([])
 
@@ -215,6 +214,8 @@ class Cheat(PlotFragment):
         prev_partner = new_state.characters[prev_partner_idx]
         if print_event:
             print("{} finds out what {} did and is devastated. They break up with {}.".format(prev_partner.name, cheater.name, cheater.name))
+        if cheater.romantic_partner == prev_partner:
+            cheater.romantic_partner = False
         prev_partner.romantic_partner = False
         prev_partner.relationships[cheater] -= 30
         prev_partner.updateHappiness(-5)

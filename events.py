@@ -140,6 +140,7 @@ class DoNothing(PlotFragment):
     def doEvent(self, worldstate, characters, environment, print_event=True):
         reachable_worldstate = copy.deepcopy(worldstate)
         if print_event == True:
-            print("Nothing happens")
+            #print("Nothing happens")
+            print(".")
         return self.updateEventHistory(reachable_worldstate, characters, environment)
 

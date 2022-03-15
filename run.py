@@ -17,7 +17,7 @@ def getRunableEvents(current_worldstate, possible_events):
     return runableEvents
 
 
-def runStory(current_worldstate, possible_events, depth_limit, waypoints = None):
+def runStory(current_worldstate, possible_events, depth_limit, waypoints = None, lookaheadDepth=2):
     if (depth_limit == 0):
         return current_worldstate
     
@@ -35,7 +35,7 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
         desired_world_state = copy.deepcopy(current_worldstate) # TODO: Replace this with an actual goal worldstate
 
     #idx_of_event_to_run = selectEventIndex(runable_events, desired_world_state)[0]
-    depthToSearch = min(depth_limit, 2)
+    depthToSearch = min(depth_limit, lookaheadDepth)
     indexValuePair = getBestIndexLookingAhead(depthToSearch, runable_events, desired_world_state, possible_events) #First parameter indicates search depth. Do not exceed 6.
     idx_of_event_to_run = indexValuePair[0]
     #print("Event selected. Supposed distance: ")
@@ -59,8 +59,8 @@ def runStory(current_worldstate, possible_events, depth_limit, waypoints = None)
         #print("Waypoint reached. Moving to next waypoint.")
         waypoints.pop(0)
 
-
-    #print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
+    if depth_limit == 1:
+        print(distanceBetweenWorldstates(next_worldstate, desired_world_state))
     return runStory(next_worldstate, possible_events, depth_limit - 1, waypoints)
 
 def waypointTestEnvironment():
@@ -71,9 +71,9 @@ def waypointTestEnvironment():
     wp_space.setDistance(wp_serenity, 0)
 
     # Character & Relationship Initialization
-    wp_jess = Character("Jess", health=8, happiness=8, location=wp_serenity, romantic_partner=False)
-    wp_mal = Character("Mal", health=8, happiness=7, location=wp_serenity, romantic_partner=False)
-    wp_inara = Character("Inara", health=8, happiness=5, location=wp_serenity, romantic_partner=False)
+    wp_jess = Character("Jess", health=6, happiness=8, location=wp_serenity, romantic_partner=False)
+    wp_mal = Character("Mal", health=6, happiness=7, location=wp_serenity, romantic_partner=False)
+    wp_inara = Character("Inara", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False)
 
     wp_jess.updateRelationship(wp_mal, 45)
     wp_jess.updateRelationship(wp_inara, 0)
@@ -89,6 +89,7 @@ def waypointTestEnvironment():
     wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
 
     # Update characters for second waypoint
+
     wp_jess.health = None
     wp_mal.health = None
     wp_inara.health = None
@@ -105,111 +106,89 @@ def waypointTestEnvironment():
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate) # Save second waypoint
     wp_2_worldstate.drama_score = 15
 
-
-    wp_jess.updateRelationship(wp_mal, -30)
+    #wp_jess = Character("Jess", health=None, happiness=None, location=wp_serenity, romantic_partner=None)
     wp_mal.updateRelationship(wp_jess, -30)
+    wp_inara.relationships.pop(wp_jess)
     wp_mal.updateRelationship(wp_inara, 30)
     wp_inara.updateRelationship(wp_mal, 45)
     wp_mal.romantic_partner = wp_inara
+    wp_inara.romantic_partner = wp_mal
+    wp_inara.fugitive = True
+    wp_inara.murderer = True
+    wp_mal.has_job = True
     wp_chars = [wp_mal, wp_inara]
 
 
-    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 5)
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments, 40)
     wp_3_worldstate = copy.deepcopy(wp_curr_worldstate) # Save third waypoint
-    wp_inara.murderer = True
-    wp_3_worldstate.drama_score = 1000
+    wp_3_worldstate.drama_score = 100
 
     waypoints = [wp_2_worldstate, wp_3_worldstate]
     starting_point = wp_init_worldstate
 
     return [starting_point, waypoints]
 
-if __name__ == "__main__":
+
+def waypointTestEnvironmentAlt():
     # Environment Initialization
-    serenity = Environment("Serenity", 25, False, True)
-    space = Environment("Space", -100, True, False)
-    serenity.setDistance(space, 0)
-    space.setDistance(serenity, 0)
+    wp_serenity = Environment("Serenity", 25, False, True)
+    wp_space = Environment("Space", -100, True, False)
+    wp_serenity.setDistance(wp_space, 0)
+    wp_space.setDistance(wp_serenity, 0)
 
     # Character & Relationship Initialization
-    jess = Character("Jess", health=7, happiness=10, location=serenity)
-    mal = Character("Mal", health=7, happiness=10, location=serenity)
-    inara = Character("Inara", health=10, happiness=0, location=serenity)
+    wp_jess = Character("Jess", health=7, happiness=8, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
+    wp_mal = Character("Mal", health=7, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
+    wp_inara = Character("Inara", health=5, happiness=5, location=wp_serenity, romantic_partner=False, murderer=False, fugitive=False, in_jail=False, stole=False, has_job=False, exploited=False)
 
-    jess.updateRelationship(mal, 45)
-    mal.updateRelationship(jess, 45)
-    inara.updateRelationship(jess, 45)
-    inara.updateRelationship(mal, 45)
+    wp_environments = [wp_serenity, wp_space]
+    wp_chars = [wp_jess, wp_mal, wp_inara]
+    wp_curr_worldstate = WorldState(0, wp_chars, wp_environments)
 
-    happy_jess = Character("Jess", happiness=10, location=serenity)
-    happy_mal = Character("Mal", happiness=10, location=serenity)
-    heartbroken_inara = Character("Inara", location=serenity)
+    wp_init_worldstate = copy.deepcopy(wp_curr_worldstate) # Save FIRST worldstate
 
-    happy_jess.updateRelationship(happy_mal, 90)
-    happy_mal.updateRelationship(happy_jess, 70)
+    # Update characters for second waypoint
 
-    loveChars = [happy_mal, happy_jess, heartbroken_inara]
+    wp_jess2 = Character("Jess", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, exploited=None)
+    wp_mal2 = Character("Mal", health=None, happiness=None, romantic_partner=None, murderer=None, fugitive=None, in_jail=None, stole=None, has_job=None, exploited=None)
+    wp_jess2.murderer = True
+    wp_mal2.stole = True
+    wp_jess2.updateRelationship(wp_mal2, 40)
+    wp_mal2.updateRelationship(wp_jess2, 40)
+    wp_mal2.romantic_partner = wp_jess2
+    wp_jess2.romantic_partner = wp_mal2
 
+    wp_chars2 = [wp_jess2, wp_mal2]
 
-    environments = [serenity, space]
-    characters = [jess, mal, inara]
-
-    initialState = WorldState(0, characters, environments)
-
-    # Creating new characters for a more interesting waypoint.
-
-    new_jess = Character("Jess", health=2, happiness=0, location=serenity)
-    new_mal = Character("Mal", health=2, happiness=0, location=serenity)
-    new_inara = Character("Inara", health=2, happiness=9, location=serenity)
-    new_jess.updateRelationship(new_mal, 35)
-    new_mal.updateRelationship(new_jess, -25)
-    new_inara.updateRelationship(new_jess, 60)
-    new_inara.updateRelationship(new_mal, -50)
-    newChars = [new_mal, new_jess, new_inara]
-
-    #updateState = WorldState(1, [Character("Jess", health=2)], environments)
-    updateState = WorldState(1, newChars, environments)
-    loveState = WorldState(1, loveChars, environments)
+    wp_curr_worldstate2 = WorldState(0, wp_chars2, wp_environments, 10)
+    wp_2_worldstate = copy.deepcopy(wp_curr_worldstate2) # Save second waypoint
+    wp_2_worldstate.drama_score = 100
 
 
-    possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(), 
+    waypoints = [wp_2_worldstate]
+    starting_point = wp_init_worldstate
+
+    return [starting_point, waypoints]
+
+if __name__ == "__main__":
+
+    possibleEvents = [FallInLove(), AskOnDate(),  HitBySpaceCar(), GetMiningJob(),
                         GetSpaceShuttleJob(), GoToSpaceJail(), SoloJailbreak(), CoffeeSpill(),
                         HospitalVisit(), Cheat(), Steal(), Irritate(), Befriend(), LoseJob(),
                         AssistedJailBreak(), SabotagedJailBreak(), DoNothing()]
 
-    loveEvents = [FallInLove(), AskOnDate(), Cheat(), Irritate(), Befriend()]
-    #loveEvents = [FallInLove(), Cheat()]
-    simpleTest = [FallInLove(), AskOnDate(), DoNothing()]
-
-    #runStory(initialState, loveEvents, 5, updateState)
-    #runStory(initialState, simpleTest, 5, updateState)
-    #print(distanceBetweenWorldstates(initialState, updateState))
-
-    """
-    #"TALE OF WOE AND MISERY:"
-    finalState = runStory(initialState, possibleEvents, 25, updateState)
-
-    print("Starting Distance: ")
-    print(distanceBetweenWorldstates(initialState, updateState))
-
-    print("Final Distance: ")
-    print(distanceBetweenWorldstates(finalState, updateState))
-
-    
-    finalState = runStory(initialState, simpleTest, 10, loveState)
-
-    print("Starting Distance: ")
-    print(distanceBetweenWorldstates(initialState, loveState))
-
-    print("Final Distance: ")
-    print(distanceBetweenWorldstates(finalState, loveState))
-    """
-   #for character in finalState.characters:
-    #    print(character)
-    #    print (character.relationships)
-
+    # First demo story
     initWorldState, waypoints = waypointTestEnvironment()
     runStory(initWorldState, possibleEvents, 15, waypoints)
+
+    print("")
+    print("Second Story:")
+    print("")
+
+    # Second demo story
+    initWorldState, waypoints = waypointTestEnvironmentAlt()
+    runStory(initWorldState, possibleEvents, 15, waypoints, lookaheadDepth=1)
+
 
 
 

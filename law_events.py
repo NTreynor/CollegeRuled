@@ -76,8 +76,7 @@ class GoToSpaceJail(PlotFragment):
         if not self.withinRepeatLimit(worldstate, 2):
             return False, None, environments
         for character in worldstate.characters:
-            if (character.stole or character.exploited or character.murderer or character.fugitive) \
-                and not character.in_jail:
+            if (character.stole or character.exploited or character.murderer or character.fugitive) and not character.in_jail:
                 characters = [character]
                 environment = []
                 if self.withinRecentHistoryLimit(worldstate, characters, environment, 3):
@@ -192,9 +191,10 @@ class SabotagedJailBreak(PlotFragment):
             if character.in_jail:
                 for character2 in worldstate.characters:
                     if character2.relationships[character] < 10:
-                        if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 5):
-                            valid_characters.append([character, character2])
-                            environments.append([])
+                        if character != character2:
+                            if self.withinRecentHistoryLimit(worldstate, [character, character2], [], 5):
+                                valid_characters.append([character, character2])
+                                environments.append([])
         if valid_characters:
             return True, valid_characters, environments
         else:

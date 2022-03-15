@@ -28,8 +28,6 @@ class Character:
     def getAttributeDistance(self, attribute_idx, attribute_value):
         if attribute_value == None: # Don't do a comparison if one doesn't need to be made.
             return 0
-        #if self.getAttributes()[attribute_idx] == None: # Don't do a comparison if one doesn't need to be made.
-        #    return 0
         if attribute_idx in [0, 1]:  # health or happiness
             dist = (self.getAttributes()[attribute_idx] - attribute_value) * 5 
             dist = abs(dist)
@@ -41,21 +39,15 @@ class Character:
             dist = 0
             #print("Calculating relationship difference")
             for character in attribute_value:
-                #print("Char found")
-                #print(character)
                 charFound = False
                 for character2 in self.relationships:
                     if character.name == character2.name:
                         char_dist = (self.relationships[character2] - attribute_value[character]) * 1/4
                         dist += abs(char_dist)
-                        #print("Updated char relationship distance")
-                        #print(abs(char_dist))
                         charFound = True
-                if charFound == False: # No match found. Incremend attribute.
+                if charFound == False: # No match found. Increment attribute.
                     char_dist = attribute_value[character] * 1/4  # initialize relationship as 0
                     dist += abs(char_dist)
-                    #print("No relationship found. Increment distance by ")
-                    #print(abs(char_dist))
         elif attribute_idx == 9:  # romantic interest
             #print("romantic partner being tested")
             if self.romantic_partner != False and self.romantic_partner != None: # If there is a current romantic partner..
@@ -85,11 +77,6 @@ class Character:
         for idx, attribute in enumerate(future_state_attributes):
             if attribute:
                 distanceInc = self.getAttributeDistance(idx, attribute)
-                #print("idx")
-                #print(idx)
-                #print("distance:")
-                #print(distanceInc)
-                #print(distance)
                 distance += distanceInc
         return distance
 
@@ -241,7 +228,8 @@ class PlotFragment:
         for event in worldstate.event_history:
             if event[0] == type(self):
                 count += 1
-        #print(type(self), count)   # Count updating apropriately.
+        #if count >= 1:
+        #    print(type(self), count)   # Count updating apropriately.
         return count < repeat_limit
 
     def withinRecentHistoryLimit(self, worldstate, characters, environment, num_recent_events):
