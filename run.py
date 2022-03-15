@@ -162,7 +162,7 @@ def waypointTestEnvironmentAlt():
 
     wp_curr_worldstate2 = WorldState(0, wp_chars2, wp_environments, 10)
     wp_2_worldstate = copy.deepcopy(wp_curr_worldstate2) # Save second waypoint
-    wp_2_worldstate.drama_score = 70
+    wp_2_worldstate.drama_score = 100
 
 
     waypoints = [wp_2_worldstate]
